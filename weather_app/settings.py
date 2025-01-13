@@ -90,17 +90,17 @@ DATABASES = {
         #'ENGINE': 'django.db.backends.sqlite3',
         #'NAME': BASE_DIR / 'db.sqlite3',
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'weather_db_1',  # Make sure this matches the name of your database
-        'USER': 'user',           # The MySQL user you want to use
-        'PASSWORD': 'saifch',    # The password for the MySQL user
-        'HOST': '127.0.0.1',      # Use the appropriate host, e.g., localhost or a Docker container IP
-        'PORT': '3309',
+        'NAME': os.getenv('DB_NAME', 'fallback-db-name'),
+        'USER': os.getenv('DB_USER', 'fallback-user'),
+        'PASSWORD': os.getenv('DB_PASSWORD', 'fallback-password'),
+        'HOST': os.getenv('DB_HOST', '127.0.0.1'),
+        'PORT': os.getenv('DB_PORT', '3306'),
     }
 }
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URI = 'http://127.0.0.1:8000/accounts/google/login/callback/'
-GOOGLE_CLIENT_ID = os.getenv('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY')
-GOOGLE_CLIENT_SECRET = os.getenv('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET')
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.getenv('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY')
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.getenv('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET')
 
 
 AUTHENTICATION_BACKENDS = [
