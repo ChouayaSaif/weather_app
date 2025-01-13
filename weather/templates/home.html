@@ -1,0 +1,168 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+	<title>Tunisian Weather App</title>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title> Tunisian Weather Application</title>
+    <link rel="icon" href="{% static 'images\tunis.png' %}" type="image/png" sizes="512x512">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <style>
+/* Full-page background container */
+.background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('static/images/sidibou.jpg');
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+    filter: blur(2px); /* Blurring the background */
+    z-index: -1; /* Make sure the background is behind the content */
+}
+
+/* Content styling */
+.content {
+    text-align: center;
+    color: white;
+    padding: 100px;
+    font-family: Arial, sans-serif;
+    position: relative; /* Ensures content stays on top of the background */
+}
+
+/* Darker white color for the heading and paragraph */
+.content h1,
+.content p {
+    color: #f0f0f0; /* Darker white (light grayish) color for better contrast */
+}
+
+/* Flexbox container for SVG and Developer info */
+.content-container {
+    display: flex;
+    justify-content: center; /* Center the entire container horizontally */
+    align-items: center; /* Center items vertically */
+    max-width: 1200px; /* Limit the total width of the container */
+    margin: 0 auto; /* Center the container on the page */
+    padding: 20px; /* Add padding around the content */
+    gap: 20px; /* Fixed distance between SVG and Developer info */
+}
+
+/* SVG styling */
+.bdt-lottie-container {
+    display: inline-block;
+    max-width: 500px; /* Set maximum width for the SVG */
+    max-height: 500px; /* Optional: Set maximum height */
+    width: 70%; /* Responsive width */
+    height: auto; /* Maintain aspect ratio */
+    flex-shrink: 0; /* Prevent the SVG from shrinking too small */
+}
+
+/* Developer info card styling */
+.developer-info-container {
+    display: flex; /* Enable Flexbox */
+    flex-direction: column; /* Stack items vertically */
+    justify-content: center; /* Center items vertically */
+    align-items: center; /* Center items horizontally */
+    text-align: center; /* Center text */
+    background-color: #f4f4f4; /* Add a light background color */
+    padding: 20px; /* Add some padding for spacing */
+    border-radius: 10px; /* Add rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a shadow for a polished look */
+    flex-shrink: 0; /* Prevent shrinking */
+}
+
+/* Styling for developer name and links */
+.developer-info-container h2 {
+    margin-bottom: 10px;
+}
+
+.developer-info-container a p {
+    color: black;
+    text-decoration: none;
+    margin-right: 10px;
+}
+
+/* Icon styling */
+.developer-info-container .social-icons i {
+    font-size: 24px;
+    margin-right: 10px;
+    transition: color 0.3s ease;
+}
+
+.developer-info-container .social-icons i:hover {
+    color: #0073e6; /* Change color on hover */
+}
+
+
+    </style>
+<link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin><script type="text/javascript" src="https://eugene.b-cdn.net/wp-includes/js/jquery/jquery.min.js?ver=3.7.1" id="jquery-core-js"></script>
+</head>
+
+<body class="home page-template page-template-elementor_header_footer page page-id-9 ehf-header ehf-footer ehf-template-eugene ehf-stylesheet-eugene elementor-default elementor-template-full-width elementor-kit-6 elementor-page elementor-page-9">
+
+    <div class="background"></div> 
+    
+    <div class="content">
+        <h1>Your Tunisian Weather App</h1>
+        <p>Get accurate and up-to-date weather information for your favorite Tunisian destinations.</p>
+        
+        <!-- Flexbox container for SVG and Developer info -->
+        <div class="content-container">
+            <!-- Developer Info Section on the Left -->
+            <div class="developer-info-container">
+                <h2 style="color: black;">Saif Chouaya</h2>
+                <p style="color: black;">Connect with me:</p>
+                <div class="social-icons">
+                    <a href="https://github.com/ChouayaSaif" target="_blank"><i class="fab fa-github"></i></a>
+                    <a href="https://www.linkedin.com/in/saif-chouaya/" target="_blank"><i class="fab fa-linkedin"></i></a>
+                </div>
+                <p><a href="accounts/login" target="_blank">Visit your App</a></p>
+            </div>
+
+            <!-- SVG container on the Right -->
+            <div data-elementor-type="wp-post" data-elementor-id="14" class="elementor elementor-14">
+                <div class="elementor-element elementor-element-2077313 animated-fast elementor-invisible elementor-widget elementor-widget-bdt-lottie-image" data-id="2077313" data-element_type="widget" data-settings="{&quot;_animation&quot;:&quot;fadeInRight&quot;,&quot;_animation_delay&quot;:500,&quot;caption_source&quot;:&quot;none&quot;,&quot;lottie_start_point&quot;:{&quot;unit&quot;:&quot;%&quot;,&quot;size&quot;:&quot;0&quot;,&quot;sizes&quot;:[]},&quot;lottie_end_point&quot;:{&quot;unit&quot;:&quot;%&quot;,&quot;size&quot;:&quot;100&quot;,&quot;sizes&quot;:[]}}" data-widget_type="bdt-lottie-image.default">
+                    <div id="bdt-lottie-2077313" class="bdt-lottie-container" data-settings="{&quot;loop&quot;:true,&quot;is_json_url&quot;:true,&quot;json_path&quot;:&quot;https:\/\/lottie.host\/ede1754c-1952-4752-ac01-3b4f688600e8\/sQ58z6VGAn.json&quot;,&quot;json_code&quot;:&quot;&quot;,&quot;view_type&quot;:&quot;pageload&quot;,&quot;speed&quot;:&quot;1&quot;,&quot;play_action&quot;:&quot;autoplay&quot;,&quot;start_point&quot;:0,&quot;end_point&quot;:&quot;100&quot;,&quot;lottie_renderer&quot;:&quot;svg&quot;}">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+<script type="text/javascript" src="https://eugene.b-cdn.net/wp-content/plugins/simple-weather/js/simple-weather.js?ver=4.1.1" id="simple-weather-main-js"></script>
+<script type="text/javascript" src="https://eugene.b-cdn.net/wp-content/themes/eugene/framework/js/shortcodes.js?ver=1.0" id="shortcodes-js"></script>
+<script type="text/javascript" src="https://eugene.b-cdn.net/wp-content/themes/eugene/framework/js/plugins.js?ver=1.0" id="plugins-js-js"></script>
+<script type="text/javascript" src="https://eugene.b-cdn.net/wp-content/themes/eugene/framework/js/superfish.js?ver=1.4" id="superfish-js"></script>
+<script type="text/javascript" src="https://eugene.b-cdn.net/wp-content/themes/eugene/framework/js/jquery.flexslider-min.js?ver=2.2.0" id="flexslider-js-js"></script>
+<script type="text/javascript" src="https://eugene.b-cdn.net/wp-content/themes/eugene/framework/js/functions.js?ver=1.0" id="functions-js"></script>
+<script type="text/javascript" src="https://eugene.b-cdn.net/wp-content/plugins/hf-builder-brt/inc/js/frontend.js?ver=1.6.12" id="hfe-frontend-js-js"></script>
+<script type="text/javascript" src="https://eugene.b-cdn.net/wp-includes/js/comment-reply.min.js?ver=6.7.1" id="comment-reply-js" async="async" data-wp-strategy="async"></script>
+<script type="text/javascript" src="https://eugene.b-cdn.net/wp-content/plugins/element-pack/assets/vendor/js/lottie.min.js?ver=5.6.10" id="lottie-js"></script>
+<script type="text/javascript" id="bdt-uikit-js-extra">
+/* <![CDATA[ */
+var element_pack_ajax_login_config = {"ajaxurl":"https:\/\/eugene.brickthemes.com\/wp-admin\/admin-ajax.php","language":"en","loadingmessage":"Sending user info, please wait...","unknownerror":"Unknown error, make sure access is correct!"};
+var ElementPackConfig = {"ajaxurl":"https:\/\/eugene.brickthemes.com\/wp-admin\/admin-ajax.php","nonce":"1fe38a0ec7","data_table":{"language":{"sLengthMenu":"Show _MENU_ Entries","sInfo":"Showing _START_ to _END_ of _TOTAL_ entries","sSearch":"Search :","sZeroRecords":"No matching records found","oPaginate":{"sPrevious":"Previous","sNext":"Next"}}},"contact_form":{"sending_msg":"Sending message please wait...","captcha_nd":"Invisible captcha not defined!","captcha_nr":"Could not get invisible captcha response!"},"mailchimp":{"subscribing":"Subscribing you please wait..."},"search":{"more_result":"More Results","search_result":"SEARCH RESULT","not_found":"not found"},"elements_data":{"sections":[],"columns":[],"widgets":[]}};
+/* ]]> */
+</script>
+<script type="text/javascript" src="https://eugene.b-cdn.net/wp-content/plugins/element-pack/assets/js/bdt-uikit.min.js?ver=3.17.11" id="bdt-uikit-js"></script>
+<script type="text/javascript" src="https://eugene.b-cdn.net/wp-content/plugins/elementor/assets/js/webpack.runtime.min.js?ver=3.25.4" id="elementor-webpack-runtime-js"></script>
+<script type="text/javascript" src="https://eugene.b-cdn.net/wp-content/plugins/elementor/assets/js/frontend-modules.min.js?ver=3.25.4" id="elementor-frontend-modules-js"></script>
+<script type="text/javascript" src="https://eugene.b-cdn.net/wp-includes/js/jquery/ui/core.min.js?ver=1.13.3" id="jquery-ui-core-js"></script>
+<script type="text/javascript" id="elementor-frontend-js-before">
+/* <![CDATA[ */
+var elementorFrontendConfig = {"environmentMode":{"edit":false,"wpPreview":false,"isScriptDebug":false},"i18n":{"shareOnFacebook":"Share on Facebook","shareOnTwitter":"Share on Twitter","pinIt":"Pin it","download":"Download","downloadImage":"Download image","fullscreen":"Fullscreen","zoom":"Zoom","share":"Share","playVideo":"Play Video","previous":"Previous","next":"Next","close":"Close","a11yCarouselWrapperAriaLabel":"Carousel | Horizontal scrolling: Arrow Left & Right","a11yCarouselPrevSlideMessage":"Previous slide","a11yCarouselNextSlideMessage":"Next slide","a11yCarouselFirstSlideMessage":"This is the first slide","a11yCarouselLastSlideMessage":"This is the last slide","a11yCarouselPaginationBulletMessage":"Go to slide"},"is_rtl":false,"breakpoints":{"xs":0,"sm":480,"md":768,"lg":1025,"xl":1440,"xxl":1600},"responsive":{"breakpoints":{"mobile":{"label":"Mobile Portrait","value":767,"default_value":767,"direction":"max","is_enabled":true},"mobile_extra":{"label":"Mobile Landscape","value":880,"default_value":880,"direction":"max","is_enabled":false},"tablet":{"label":"Tablet Portrait","value":1024,"default_value":1024,"direction":"max","is_enabled":true},"tablet_extra":{"label":"Tablet Landscape","value":1200,"default_value":1200,"direction":"max","is_enabled":false},"laptop":{"label":"Laptop","value":1366,"default_value":1366,"direction":"max","is_enabled":false},"widescreen":{"label":"Widescreen","value":2400,"default_value":2400,"direction":"min","is_enabled":false}},"hasCustomBreakpoints":false},"version":"3.25.4","is_static":false,"experimentalFeatures":{"additional_custom_breakpoints":true,"e_swiper_latest":true,"e_nested_atomic_repeaters":true,"e_optimized_control_loading":true,"e_onboarding":true,"e_css_smooth_scroll":true,"home_screen":true,"landing-pages":true,"nested-elements":true,"editor_v2":true,"link-in-bio":true,"floating-buttons":true},"urls":{"assets":"https:\/\/eugene.b-cdn.net\/wp-content\/plugins\/elementor\/assets\/","ajaxurl":"https:\/\/eugene.brickthemes.com\/wp-admin\/admin-ajax.php","uploadUrl":"https:\/\/eugene.b-cdn.net\/wp-content\/uploads"},"nonces":{"floatingButtonsClickTracking":"c2c607aeb2"},"swiperClass":"swiper","settings":{"page":[],"editorPreferences":[]},"kit":{"active_breakpoints":["viewport_mobile","viewport_tablet"],"global_image_lightbox":"yes","lightbox_enable_counter":"yes","lightbox_enable_fullscreen":"yes","lightbox_enable_zoom":"yes","lightbox_enable_share":"yes","lightbox_title_src":"title","lightbox_description_src":"description"},"post":{"id":9,"title":"Eugene%20%E2%80%93%20Weather%20Forecast%20WordPress%20Theme","excerpt":"","featuredImage":false}};
+/* ]]> */
+</script>
+<script type="text/javascript" src="https://eugene.b-cdn.net/wp-content/plugins/elementor/assets/js/frontend.min.js?ver=3.25.4" id="elementor-frontend-js"></script>
+<script type="text/javascript" src="https://eugene.b-cdn.net/wp-content/plugins/element-pack/assets/js/modules/ep-lottie-image.min.js?ver=7.12.2" id="ep-lottie-image-js"></script>
+	
+</body>
+</html> 
+

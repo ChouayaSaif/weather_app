@@ -1,0 +1,143 @@
+{% load static %}
+{% load i18n %}
+{% load allauth account %}
+
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <title> Tunisian Weather Application</title>
+    <link rel="icon" href="{% static 'images\tunis.png' %}" type="image/png" sizes="512x512">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Full-page background container */
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("{% static 'images/sidibou.jpg' %}");
+            background-size: cover;
+            background-position: center center;
+            background-attachment: fixed;
+            filter: blur(2px);
+            z-index: -1;
+        }
+
+        /* Centered content styling */
+        .content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Card styling */
+        .login-card {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .login-card img {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 20px;
+        }
+
+        .login-card h1 {
+            color: #333;
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .login-card p {
+            font-size: 14px;
+            color: #555;
+            margin-top: 10px;
+        }
+
+        .submit-button {
+            margin-top: 20px;
+        }
+
+        .submit-button button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007BFF;
+            color: white;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .submit-button button:hover {
+            background-color: #0056b3;
+        }
+
+        .social-login {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .social-login img {
+            width: 40px;
+            height: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div class="background"></div>
+
+    <div class="content">
+        <div class="login-card">
+            <img style=" width: 90px; height:90px; margin-bottom: -10px;" src="{% static 'images/register.png' %}" alt="Sign Up">
+            <h1>{% trans "Sign Up" %}</h1>
+
+            {% if not SOCIALACCOUNT_ONLY %}
+                {% url 'account_signup' as action_url %}
+                <form method="post" action="{{ action_url }}">
+                    {% csrf_token %}
+                    {% element fields form=form unlabeled=True %}{% endelement %}
+                    {{ redirect_field }}
+                    <div class="submit-button">
+                        <button type="submit">{% trans "Sign Up" %}</button>
+                    </div>
+                </form>
+            {% endif %}
+
+            {% if PASSKEY_SIGNUP_ENABLED %}
+                <hr>
+                <a href="{{ signup_by_passkey_url }}" class="submit-button">
+                    <button>{% trans "Sign up using a passkey" %}</button>
+                </a>
+            {% endif %}
+
+            {% if SOCIALACCOUNT_ENABLED %}
+                <div style="margin-top: -10px;" class="social-login">
+                    {% include "socialaccount/snippets/login.html" with page_layout="entrance" %}
+                    <img style="margin-right: 120px; margin-left: 60px; width: 80px; height: 40px; margin-top: 30px;" src="https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png" alt="Google Logo">
+                </div>
+            {% endif %}
+
+            <p>
+                {% trans "Already have an account? " %}
+                <a href="{{ login_url }}">{% trans "Sign in" %}</a>.
+            </p>
+        </div>
+    </div>
+</body>
+</html>

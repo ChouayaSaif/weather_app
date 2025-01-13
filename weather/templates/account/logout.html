@@ -1,0 +1,134 @@
+{% load static %}
+{% load i18n %}
+{% load allauth account %}
+
+
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <title>Tunisian Weather App</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title> Tunisian Weather Application</title>
+    <link rel="icon" href="{% static 'images\tunis.png' %}" type="image/png" sizes="512x512">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <style>
+      /* Full-page background container */
+      .background {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url("{% static 'images/sidibou.jpg' %}");
+        background-size: cover;
+        background-position: center center;
+        background-attachment: fixed;
+        filter: blur(2px); /* Blurring the background */
+        z-index: -1; /* Make sure the background is behind the content */
+      }
+
+      /* Content styling */
+      .content {
+        display: flex;
+        justify-content: center; /* Center horizontally */
+        align-items: center; /* Center vertically */
+        height: 100vh; /* Full height of the viewport */
+        text-align: center;
+        color: white;
+        font-family: Arial, sans-serif;
+      }
+
+      /* Centered sign-out widget */
+      .login-card {
+        background-color: rgba(255, 255, 255, 0.8);
+        padding: 40px;
+        border-radius: 12px;
+        width: 100%;
+        max-width: 450px;
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+      }
+
+      .login-card img {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        margin-bottom: 20px;
+      }
+
+      .login-card h1 {
+        color: #333;
+        font-family: 'Arial', sans-serif;
+        font-size: 32px;
+        font-weight: bold;
+        margin-bottom: 20px;
+      }
+
+      .login-card p {
+        font-size: 16px;
+        color: #555;
+        margin-top: 30px;
+      }
+
+      .submit-button {
+        text-align: center;
+        margin-top: 30px;
+      }
+
+      .submit-button button {
+        width: 100%;
+        padding: 10px;
+        background-color: #e63946;
+        color: white;
+        font-weight: bold;
+        border-radius: 5px;
+        border: none;
+        cursor: pointer;
+      }
+
+      .submit-button button:hover {
+        background-color: #d62c2f;
+      }
+    </style>
+  </head>
+
+  <body class="home page-template page-template-elementor_header_footer page page-id-9 ehf-header ehf-footer ehf-template-eugene ehf-stylesheet-eugene elementor-default elementor-template-full-width elementor-kit-6 elementor-page elementor-page-9">
+
+    <div class="background"></div>
+
+    <!-- Sign out widget -->
+    <div class="content">
+      {% block content %}
+        <div class="login-card">
+          <div class="text-center">
+            <img src="{% static 'images/logout.png' %}" alt="Logout Image">
+            <h1 class="login-title">
+              {% trans "Sign Out" %}
+            </h1>
+            <p class="text-gray-600 mb-6">
+              {% trans 'Are you sure you want to sign out?' %}
+            </p>
+          </div>
+          <form method="post" action="{{ action_url }}" class="login-form">
+            {% csrf_token %}
+            {{ redirect_field }}
+
+            <div class="submit-button">
+              <button type="submit">
+                {% trans 'Sign Out' %}
+              </button>
+            </div>
+          </form>
+        </div>
+      {% endblock content %}
+    </div>
+  </body>
+</html>
+
+
+
+
+
+
+
+

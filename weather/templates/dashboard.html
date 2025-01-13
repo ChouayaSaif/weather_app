@@ -1,0 +1,743 @@
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Tunisian Weather Application</title>
+    <link rel="icon" href="{% static 'images\tunis.png' %}" type="image/png" sizes="512x512">
+    {% load static %} 
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <style>
+    /*Day Mode*/
+    :root {
+        --container-light-bg: #3D7EAE; 
+        --sun-bg: #ECCA2F;
+        --primary-bg: #81D4FA;
+        --secondary-bg: #2196F3;
+        --card-bg: white;
+        --button-bg: #4caf50;
+        --button-text-color: white;
+        --input-border: #ccc;
+        --input-radius: 20px;
+        --input-padding: 10px;  
+        --header-border: 1px solid #ccc;
+        --weather-icon-size: 50px;
+    }
+    /*Dark mode*/
+    .darkmode {
+        --container-night-bg: #121212; 
+        --moon-bg: #B0B0B0; 
+        --primary-bg: #3B6E8E; 
+        --secondary-bg: #2C6F8F; 
+        --card-bg: white; 
+        --button-bg: #388E3C; 
+        --button-text-color: black; 
+        --input-border: #555;
+        --input-radius: 20px;
+        --input-padding: 10px;
+        --header-border: 1px solid #444;
+        --weather-icon-size: 50px;
+    }
+    
+    #theme-switch {
+        height: 50px;
+        width: 50px;
+        padding: 0;
+        border-radius: 50%;
+        background-color: var(--button-text-color);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #theme-switch svg{
+        fill: var(--sun-bg);
+    }
+
+    #theme-switch svg:last-child{
+        display: none;
+    }
+
+    .darkmode #theme-switch svg:first-child{
+        display: none;
+    }
+
+    .darkmode #theme-switch svg:last-child{
+        display: block;
+    }
+
+    /**/
+    .main-container {
+        display: flex;
+        justify-content: space-between; /* Distribute the sections */
+        padding: 20px;
+    }
+
+    .left-section {
+        flex: 3; /* Larger section */
+        margin-right: 20px;
+    }
+
+    .right-section {
+        flex: 1; /* Smaller section */
+    }
+    /* Media query for medium screens (e.g., tablets) */
+    @media (max-width: 1200px) {
+    .v1 {
+        margin-top: -600px; /* Adjust the value as needed */
+    }
+    }
+
+    /* Media query for small screens (e.g., mobile) */
+    @media (max-width: 768px) {
+    .v1 {
+        margin-top: -7000px; /* Adjust the value for smaller screens */
+    }
+    }
+
+    /* Media query for very small screens (e.g., mobile in portrait mode) */
+    @media (max-width: 480px) {
+    .v1 {
+        margin-top: -10000px; /* Adjust the value further for very small screens */
+    }
+    }
+    @media (max-width: 768px) {
+        .forecast-container {
+            flex-direction: column; /* Stack the forecast items vertically on smaller screens */
+        }
+
+        .container {
+            grid-template-columns: 1fr; /* Use single column layout for smaller screens */
+        }
+
+        .card {
+            max-width: 100%; /* Ensure the cards fit within the screen */
+        }
+
+        /* Adjust margins for smaller screens */
+    }
+
+    .weather-forecast {
+        position: fixed;
+        top: 40%; /* Decrease from 50% to move it up */
+        left: 50%;
+        transform: translateX(-80%);
+        z-index: 1000;
+    }
+    .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .weather-forecast {
+        margin-top: 20px; /* Adjust the space as needed */
+    }
+
+    body {
+        height: 100%;
+        margin: 0; /* Remove default margin */
+        transition: background-color 0.3s ease;
+    }
+
+    .container-fluid {
+        display: flex;
+        flex-direction: column; /* Stack children vertically */
+        height: 100vh; /* Set height to 100% of the viewport height */
+        overflow-x: hidden; /* Prevent horizontal overflow */
+        background-image: linear-gradient(var(--primary-bg), var(--secondary-bg));
+        background-repeat: no-repeat;
+        color: #fff;
+    }
+
+    main {
+        flex: 1; /* Allow main to grow and fill the space */
+    }
+    footer {
+        margin: 0; /* Remove any margin */
+        padding: 0.5rem 0; /* Adjust padding as needed */
+        width: 100%; /* Ensure footer takes full width */
+    }
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: grid;
+        gap: 20px;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+
+    .card {
+        background: var(--card-bg);
+        border-radius: 10px;
+        padding: 20px;
+    }
+
+    .text {
+        color: var(--button-text-color);
+    }
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+    }
+
+    .header input {
+        padding: var(--input-padding);
+        border: var(--header-border);
+        border-radius: var(--input-radius);
+        width: 70%;
+    }
+
+    .header button {
+        background-color: var(--button-bg);
+        color: var(--button-text-color);
+        border: none;
+        border-radius: var(--input-radius);
+        padding: 10px 20px;
+        cursor: pointer;
+    }
+    .forecast-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .weather-icon {
+        width: var(--weather-icon-size);
+        height: var(--weather-icon-size);
+        margin-bottom: 10px;
+    }
+
+    .time, .main-weather, .forecast, .hourly {
+        text-align: center;
+    }
+
+    .main-weather {
+        font-size: 1.2rem;
+    }
+
+    .temperature {
+        font-size: 2.5rem;
+    }
+
+    .icon {
+        margin-right: 10px;
+    }
+
+    .toggle {
+        text-align: right;
+    }
+
+    .toggle button {
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        font-size: 1.1rem;
+    }
+
+    /*Styling recommendations elements*/
+    .recommendation-box {
+        background-color: #f9f9f9;  /* Light background color */
+        border: 1px solid #ccc;     /* Border around the box */
+        border-radius: 8px;         /* Rounded corners */
+        padding: 5px;              /* Padding inside the box */
+        margin-bottom: 5px;        /* Spacing between items */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow effect */
+    }
+    
+    .recommendation-box h2 {
+        font-size: 18px;
+        margin-bottom: 10px;  /* Space between title and description */
+    }
+
+    .recommendation-box p {
+        font-size: 14px;
+        margin-bottom: 5px;  /* Space between paragraphs */
+    }
+
+    </style>
+</head>
+<body>
+    <!--Widget 1-->
+    <div id="ww_070dadf406486" v='1.3' loc='id' a='{"t":"ticker","lang":"en","sl_lpl":1,"ids":["wl4588"],"font":"Arial","sl_ics":"one_a","sl_sot":"celsius","cl_bkg":"#1976D2","cl_font":"#FFFFFF","cl_cloud":"#FFFFFF","cl_persp":"#1976D2","cl_sun":"#0D47A1","cl_moon":"#0D47A1","cl_thund":"#1565C0"}'>
+        <a href="https://weatherwidget.org/" id="ww_070dadf406486_u" target="_blank" style="color: #0D47A1;">Weather widgets for websites</a>
+    </div>
+    <script async src="https://app3.weatherwidget.org/js/?id=ww_070dadf406486"></script>    
+    <!---->
+    <div class="container-fluid px-1 px-sm-3">
+        
+        <header>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 30px;">
+                <h1 style="margin-left: 25%;" class="text-center text">Hi, {{ user }}! Welcome to your Weather App</h1>
+                <!-- Day/Night Icon -->
+                <button id="theme-switch" style="margin-left: auto; margin-right: 100px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#FFF"><path d="M480-280q-83 0-141.5-58.5T280-480q0-83 58.5-141.5T480-680q83 0 141.5 58.5T680-480q0 83-58.5 141.5T480-280ZM200-440H40v-80h160v80Zm720 0H760v-80h160v80ZM440-760v-160h80v160h-80Zm0 720v-160h80v160h-80ZM256-650l-101-97 57-59 96 100-52 56Zm492 496-97-101 53-55 101 97-57 59Zm-98-550 97-101 59 57-100 96-56-52ZM154-212l101-97 55 53-97 101-59-57Z"/></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#FFF"><path d="M480-120q-150 0-255-105T120-480q0-150 105-255t255-105q14 0 27.5 1t26.5 3q-41 29-65.5 75.5T444-660q0 90 63 153t153 63q55 0 101-24.5t75-65.5q2 13 3 26.5t1 27.5q0 150-105 255T480-120Z"/></svg>
+                </button>
+                {% block content %}
+                    <div style="margin-right: 3%; width: auto; padding: 5px;" class="logout-container">
+                        <h3 style="font-size: 14px;">
+                            <a href="{% url 'account_logout' %}" class="text" style="background-color: #007bff; padding: 5px 10px; text-decoration: none; border-radius: 5px;">
+                                Logout
+                            </a>
+                        </h3>
+                    </div>
+                {% endblock %}
+            </div>
+            <div style="display: flex; align-items: center; gap: 20px;">
+                <div class="large-font">
+                    <img src="{% static 'images/logo.png' %}" width="300" height="200" style="margin-left: 30px; margin-right: -30px ;" alt="Tunisia logo">
+                </div>
+                <form method="POST" action="{% url 'dashboard' %}" style="flex-grow: 1; margin: 0;">
+                    {% csrf_token %}
+                    <div class="header" style="display: flex; align-items: center; width: 100%; justify-content: space-between;">
+                        <div style="position: relative; flex-grow: 1; display: flex; align-items: center; width: 100%;">
+                            <input type="text" id="location" name="location" class="form-control" 
+                            placeholder="Enter a Tunisian city, e.g., Kairouan" required 
+                            style="padding-left: 30px; width: 100%;"
+                            value="{% if preferences.default_location %}{{ preferences.default_location }}{% else %}{{ '' }}{% endif %}">                            
+                            <span style="margin-left: -5px ;position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 16px; color: gray; cursor: pointer;" onclick="document.querySelector('button').click();">
+                                &#128269;
+                            </span>
+                        </div>
+                        <button type="submit" style="padding: 8px; font-size: 14px; max-width: 100px; margin-left: 10px; white-space: nowrap;">Get Weather</button>
+                    </div>
+                </form>                
+            </div>
+        </header>
+
+        <!-- Main container with two sections -->
+        <div class="main-container">
+            <!--Left section-->
+            <div class="left-section">
+                <!--row 1-->
+                <div style="margin-top: -40px;" class="main-container">
+                    <!--General Weather info-->
+                    <div class="left-section" style="margin-left: 30px; margin-top: 50px;">
+                        <h1 class="large-font mr-3 text" style="font-size: 100px; font-family: Arial;">{{ weather_data.temperature }}&#176;C</h1>
+                        <div style="margin-left: 20px;" class="d-flex flex-column mr-3">
+                            <h2 style="font-size: 40px;" class="mt-3 mb-0 text">{{ weather_data.city }}</h2>
+                            <small class="text" style="font-size: 30px;">{{ weather_data.date_time }}</small>
+                        </div>  
+                    </div>
+
+                    <!-- Widget 2-->
+                    <div class="right-section">
+                        <script>
+                            (function(d, s, id) {
+                                if (d.getElementById(id)) {
+                                    if (window.__TOMORROW__) {
+                                        window.__TOMORROW__.renderWidget();
+                                    }
+                                    return;
+                                }
+                                const fjs = d.getElementsByTagName(s)[0];
+                                const js = d.createElement(s);
+                                js.id = id;
+                                js.src = "https://www.tomorrow.io/v1/widget/sdk/sdk.bundle.min.js";
+                    
+                                fjs.parentNode.insertBefore(js, fjs);
+                            })(document, 'script', 'tomorrow-sdk');
+                        </script>
+                        <div class="tomorrow"
+                            data-location-id="{{ location_id }}"
+                            data-language="{{ language }}"
+                            data-unit-system="{{ unit_system }}"
+                            data-skin= "{{ skin }}"
+                            data-widget-type="{{ widget_type_3 }}"
+                            style="padding-bottom:22px;position:relative;width:550px;height:400px;"
+                            >
+                            <a
+                                href="https://www.tomorrow.io/weather-api/"
+                                rel="nofollow noopener noreferrer"
+                                target="_blank"
+                                style="position: absolute; bottom: 0; transform: translateX(-50%); left: 50%;"
+                            >
+                                <img
+                                alt="Powered by the Tomorrow.io Weather API"
+                                src="https://weather-website-client.tomorrow.io/img/powered-by.svg"
+                                width="250"
+                                height="18"
+                                />
+                            </a>
+                        </div>
+                    </div>
+                    <!---->
+                </div>
+
+                <!--row 2: widget 3-->
+                <div style="margin-top: -50px;">
+                    <iframe 
+                        src="https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=UTC&showPrint=0&src=Y2hvdWF5YXNhaWZAZ21haWwuY29t&src=M2NkMjhkMGE1ODkzZTgyMDc3MTEwNTA4ZWI5MjIzZWFhOTk1ZmFiYmE1MmNiN2E1ZTRjN2RiYzMyNWVkOGUwMkBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=Y2xhc3Nyb29tMTA5Nzc2MzEyNzQ1MzIyMTg5ODAzQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20&src=Y19jbGFzc3Jvb21mZDFiMzEwMkBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=Y2xhc3Nyb29tMTE1MTM3Mjk3MTU0Mzg0Mzk2MjY2QGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20&src=Y2xhc3Nyb29tMTE4MTY0ODc2NzA4MjQ3MzA1NzYzQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20&src=Y2xhc3Nyb29tMTE1OTIxNjUzOTY5MDE4MjEwNjYzQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20&src=YWRkcmVzc2Jvb2sjY29udGFjdHNAZ3JvdXAudi5jYWxlbmRhci5nb29nbGUuY29t&src=Y2xhc3Nyb29tMTA3Njc3NDQwODQ1MDQzOTA1MjQ3QGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20&src=Y2xhc3Nyb29tMTA5MjE2NDAyNTcwNzA2ODk1Mzk5QGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20&src=Y2xhc3Nyb29tMTA1OTc5MDg1NTQ4NzA3MTA2NDQwQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20&src=Y2xhc3Nyb29tMTA1MjA5ODgyNDk0ODU2NTc1NjU1QGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20&src=Y2xhc3Nyb29tMTE3NjU0Mzc2MDI5OTYzOTAzMjg5QGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20&src=Y2xhc3Nyb29tMTE0Mjk1OTc1NTY2Nzc4MDY5NzE3QGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20&src=Y2xhc3Nyb29tMTExNjMzMTM0NTgyNjk1OTE4NjE3QGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20&src=Y2xhc3Nyb29tMTA2NDg1ODE1NDY5ODc4MzI2ODI2QGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20&src=Y2xhc3Nyb29tMTAxNDQ2MDc0MzQxMzQ3OTM0MDU2QGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20&src=Y2xhc3Nyb29tMTA3NTI0OTUwNTkzMzgwMzg3NDI5QGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20&src=Y2xhc3Nyb29tMTA5MTA5MjA5MTA3NTExODM4MzQ5QGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20&src=ZW4udG4jaG9saWRheUBncm91cC52LmNhbGVuZGFyLmdvb2dsZS5jb20&src=Y2xhc3Nyb29tMTA0NzY3NDI3MjI2MjY1MjYzODM5QGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20&src=Y2xhc3Nyb29tMTE2NTE0MjE4MzM4NDY2Mzc4NzQzQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20&src=Y2xhc3Nyb29tMTE0MTk1ODkwNTY5ODA4MjU5NjI5QGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20&src=Y2xhc3Nyb29tMTEzMDA5ODkzNTk0MzQyNDk0NTY2QGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20&src=Y2xhc3Nyb29tMTE0NzY0OTQyNDU3Njg5MDU1Nzc3QGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20&src=Y2xhc3Nyb29tMTA1NDIyNzc5NzI1OTI4Mjk2MzY5QGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20&src=Y2xhc3Nyb29tMTAyMjkyNzkwMzAyMTUxMzIyMjA5QGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20&src=Y2xhc3Nyb29tMTAyMzQ0MTc2MDcxMjg0NTExNTM5QGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20&src=Y2xhc3Nyb29tMTEwMTk5MDc1ODAwNTk2ODc0NTQ4QGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20&src=Y2xhc3Nyb29tMTEyMTQyNzAzNzMzNzU2MjQzMTQyQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20&src=Y19jbGFzc3Jvb20zMzlhNjIxNkBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&color=%23039BE5&color=%23F4511E&color=%230047a8&color=%23b80672&color=%230047a8&color=%230047a8&color=%230047a8&color=%2333B679&color=%230047a8&color=%23007b83&color=%230047a8&color=%230047a8&color=%230047a8&color=%230047a8&color=%23202124&color=%230047a8&color=%23202124&color=%23c26401&color=%23c26401&color=%230B8043&color=%23b80672&color=%23b80672&color=%23137333&color=%230047a8&color=%23137333&color=%230047a8&color=%230047a8&color=%230047a8&color=%23007b83&color=%230047a8&color=%23137333" 
+                        style="border:solid 1px #777; border-radius: 15px;" 
+                        width="100%" 
+                        height="250" 
+                        frameborder="0" 
+                        scrolling="yes">
+                    </iframe>
+                </div>
+
+                <!--row 3-->
+                    <div class="main-container">
+                    <!-- Widget 4-->
+                    <div class="left-section" style="margin-left: -20px; margin-top: -30px;">
+                        <div class="tomorrow"
+                        data-location-id="{{ location_id }}"
+                        data-language="{{ language }}"
+                        data-unit-system="{{ unit_system }}"
+                        data-skin="{{ skin }}"
+                        data-widget-type="{{ widget_type_2 }}"
+                        style="padding-bottom:22px; position:relative; width: 520px; height: 650px; margin-top: 50px;">
+                
+                            <a href="https://www.tomorrow.io/weather-api/"
+                                rel="nofollow noopener noreferrer"
+                                target="_blank"
+                                style="position: absolute; bottom: 0; transform: translateX(-50%); left: 50%;">
+                                <img alt="Powered by the Tomorrow.io Weather API"
+                                    src="https://weather-website-client.tomorrow.io/img/powered-by.svg"
+                                    width="250"
+                                    height="18" />
+                            </a>
+                        </div>
+                    </div>
+                    <!-- Widget 5-->
+                    <div class="right-section" style="margin-top: 20px;">
+                        <iframe
+                            width="500"
+                            height="470"
+                            style="border-radius: 20px;"
+                            src="https://embed.windy.com/embed2.html?lat={{ latitude }}&lon={{ longitude }}&zoom=5&level=surface&overlay=temp&menu=&message=&marker=&calendar=&pressure=&type=map&location=coordinates&detail=&detailLat=0&detailLon=0&metricWind=default&metricTemp=default&radarRange=-1"
+                            frameborder="0">
+                        </iframe>
+                    </div>
+                </div>
+                <!--row 4-->
+                <div style="margin-top: -150px;">
+                    <script>
+                        (function(d, s, id) {
+                            if (d.getElementById(id)) {
+                                if (window.__TOMORROW__) {
+                                    window.__TOMORROW__.renderWidget();
+                                }
+                                return;
+                            }
+                            const fjs = d.getElementsByTagName(s)[0];
+                            const js = d.createElement(s);
+                            js.id = id;
+                            js.src = "https://www.tomorrow.io/v1/widget/sdk/sdk.bundle.min.js";
+                
+                            fjs.parentNode.insertBefore(js, fjs);
+                        })(document, 'script', 'tomorrow-sdk');
+                    </script>
+                    <div class="tomorrow"
+                    data-location-id="{{ location_id }},{{ location_id_1 }},{{ location_id_2 }},{{ location_id_3 }},{{ location_id_4 }},{{ location_id_5 }}"
+                    data-language="{{ language }}"
+                    data-unit-system="{{ unit_system }}"
+                    data-skin="{{ skin }}"
+                    data-widget-type="current6"
+                    style="padding-bottom:22px;position:relative;"
+                    >
+                        <a
+                            href="https://www.tomorrow.io/weather-api/"
+                            rel="nofollow noopener noreferrer"
+                            target="_blank"
+                            style="position: absolute; bottom: 0; transform: translateX(-50%); left: 50%;"
+                        >
+                            <img
+                            alt="Powered by the Tomorrow.io Weather API"
+                            src="https://weather-website-client.tomorrow.io/img/powered-by.svg"
+                            width="250"
+                            height="18"
+                            />
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!--Right section-->
+            <div class="right-section" style="margin-top: -25px;">
+                <div style="display: flex; flex-direction: column; gap: 20px; max-width: 300px;">
+                <section class="card">
+                    <div class="card-header bg-info text-white" style="height: 40px; margin-top: -10px;">
+                        <h3  style="font-size: 25px;" class="text-center">User Preferences</h3>
+                    </div>
+                    <form method="POST" style="color: black;">
+                        {% csrf_token %}
+                        <h2 style="font-size: 20px;">Update Your Preferences</h2>
+                        
+                        <!-- Default Location -->
+                        <label for="defaultLocation">Default Location:</label>
+                        <input type="text" name="defaultLocation" 
+                        value="{% if preferences.default_location %}{{ preferences.default_location }}{% else %}{{ '' }}{% endif %}"> 
+                        <!-- Favorite Locations -->
+                        <label for="favoriteLocations">Favorite Locations (comma separated):</label>
+                        <input type="text" name="favoriteLocations" 
+                            value="{% if favorite_locations %}{{ favorite_locations|join:',' }}{% else %}{{ '' }}{% endif %}">
+                        <div>
+                            <ul>
+                                {% for location in favorite_locations %}
+                                    <li>{{ location }}</li>
+                                {% empty %}
+                                    <li>No favorite locations set.</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <!-- Language -->
+                        <label for="language">Language:</label>
+                        <select name="language">
+                            <option value="en" {% if preferences and preferences.language == 'en' %}selected{% endif %}>English</option>
+                            <option value="fr" {% if preferences and preferences.language == 'fr' %}selected{% endif %}>French</option>
+                        </select>
+                        
+                        <!-- Temperature Units -->
+                        <label for="temperatureUnits">Temperature Units:</label>
+                        <select name="temperatureUnits">
+                            <option value="Celsius" {% if preferences and preferences.temperature_units == 'Celsius' %}selected{% endif %}>Celsius</option>
+                            <option value="Fahrenheit" {% if preferences and preferences.temperature_units == 'Fahrenheit' %}selected{% endif %}>Fahrenheit</option>
+                        </select>
+                        
+                        <!-- Alerts -->
+                        <label for="alertTempOver35">Alert for temperature over 35°C:</label>
+                        <input type="checkbox" name="alertTempOver35" {% if preferences and preferences.alert_temp_over_35 %}checked{% endif %}>
+                        
+                        <label for="alertRain">Alert for rain:</label>
+                        <input type="checkbox" name="alertRain" {% if preferences and preferences.alert_rain %}checked{% endif %}>
+                        
+                        <button type="submit">Save Preferences</button>
+                    </form>
+                    
+                    {% if message %}
+                        <p>{{ message }}</p>
+                    {% endif %}
+                    
+                </section>
+                <section class="card">
+                    <div class="card-header bg-info text-white" style="height:40px;">
+                        <h3 class="text-center" style="font-size: 1.2rem;">Daily Recommendations</h3>
+                    </div>
+                    <div class="text-black">
+                        {% for place in daily_recommendations %}
+                            <div class="recommendation-box">
+                                <h2 style="font-size: 20px;">{{ place.name }}</h2>
+                                <p style="font-size: 15px;">{{ place.description }}</p>
+                                <p style="font-family: 15px;"><strong>Location:</strong> {{ place.location }}</p>
+                            </div>
+                        {% empty %}
+                            <p style="font-family: 15px;">No recommendations available for the current weather.</p>
+                        {% endfor %}
+                    </div>
+                </section>
+                <section class="card">
+                    <div class="card-header bg-info text-white" style="height: 40px;">
+                        <h3 class="text-center" style="font-size: 1.1rem;">Planned Recommendations</h3>
+                    </div>
+                    <div class="text-black">
+                        <form method="POST">
+                            {% csrf_token %}
+                            
+                            <!-- Drop-down list for days_ahead -->
+                            <label for="days_ahead">Days Ahead</label>
+                            <select name="days_ahead" id="days_ahead">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                            </select>
+                            
+                            <button type="submit">Get Forecast</button>
+                        </form>
+                        
+                        {% for place in planned_weather_data %}
+                            <div class="recommendation-box">
+                                <h2 style="font-size: 20px; color: black;">{{ place.name }}</h2>
+                                <p style="font-size: 15px; color: black;">{{ place.description }}</p>
+                                <p style="font-family: 15px; color: black;"><strong>Location:</strong> {{ place.location }}</p>
+                            </div>
+                        {% empty %}
+                            <p style="font-family: 15px; color: black;">No recommendations available for the current weather.</p>
+                        {% endfor %}
+                    </div>
+                </section>
+                <section class="card">
+                    <div class="card-header bg-info text-white" style="height: 40px; margin-top: -5px;">
+                        <h3 class="text-center" style="font-size: 1.3rem;">Chatbot</h3>
+                    </div>
+                    <div style="margin-top: -10px; margin-bottom: -30px; margin-left: -20px; margin-right: -20px;" class="card-body">
+                        <p style="color: #121212; font-size: 13px;">Interact with your chatbot to receive quick weather updates and get activity suggestions!</p>
+                    </div>
+                    <div id="chatbox">
+                        <form id="chatForm" method="POST" action="{% url 'dashboard' %}">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label style="color: #121212;" for="userMessage">Your Message:</label>
+                                <div class="d-flex">
+                                    <input type="text" style="color: #121212;" class="form-control mr-2" id="userMessage" name="message" placeholder="Type your message here" required>
+                                    <button type="submit" class="btn btn-success">Send</button>
+                                </div>
+                            </div>
+                        </form>
+                        
+                
+                        <div id="chatbotResponse" style="color: black; height: 200px; overflow-y: auto; border: 1px solid #ccc; padding: 10px;">
+                            {% if chatbot_response %}
+                                <p>Chatbot says: {{ chatbot_response }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </section>
+                </div>
+            </div>
+        </div>
+        <!-- Widget 6-->
+        <div class="tomorrow"
+        data-location-id="{{ location_id }}"
+        data-language="{{ language }}"
+        data-unit-system="{{ unit_system }}"
+        data-skin="{{ skin }}"
+        data-widget-type="{{ widget_type_1 }}"
+        style="padding-bottom: 22px; position: relative;">
+        <div style="position: absolute; bottom: 0; transform: translateX(-50%); left: 50%;">
+            <img alt="Powered by the Tomorrow.io Weather API"
+                src="https://weather-website-client.tomorrow.io/img/powered-by.svg"
+                width="250"
+                height="18" />
+        </div>
+    </div>
+<footer class="bg-dark text-white py-3">
+    <div class="container text-center">
+        <p>© 2024 Saif Chouaya. All rights reserved.</p>
+    </div>
+</footer>
+
+<!-- Widget 1-->
+<script>
+    (function(d, s, id) {
+        if (d.getElementById(id)) {
+            if (window.__TOMORROW__) {
+                window.__TOMORROW__.renderWidget();
+            }
+            return;
+        }
+        const fjs = d.getElementsByTagName(s)[0];
+        const js = d.createElement(s);
+        js.id = id;
+        js.src = "https://www.tomorrow.io/v1/widget/sdk/sdk.bundle.min.js";
+        fjs.parentNode.insertBefore(js, fjs);
+    })(document, 'script', 'tomorrow-sdk');
+</script>
+<!---->
+<script>
+document.getElementById('theme-toggle').addEventListener('change', function() {
+    if (this.checked) {
+        // Night mode
+        document.body.style.backgroundColor = '#1D1F2C';  // Dark background
+    } else {
+        // Day mode
+        document.body.style.backgroundColor = '#3D7EAE';  // Light background
+    }
+});
+</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+const weatherIcon = document.getElementById('weather-icon');
+const weatherCondition = '{{ weather_data.condition }}'; // This can be dynamically set by the backend or API
+
+function updateWeatherIcon(condition) {
+    switch (condition.toLowerCase()) {
+        case 'sunny':
+            weatherIcon.className = 'fa fa-sun-o';
+            break;
+        case 'rainy':
+            weatherIcon.className = 'fa fa-umbrella';
+            break;
+        case 'cloudy':
+        case 'broken clouds':
+        case 'overcast clouds':  // Explicitly including overcast clouds
+            weatherIcon.className = 'fa fa-cloud';
+            break;
+        case 'snowy':
+            weatherIcon.className = 'fa fa-snowflake-o';
+            break;
+        // Add other conditions as needed
+        default:
+            weatherIcon.className = 'fa fa-question-circle';
+    }
+}
+
+
+// Call the function with the current weather condition 
+updateWeatherIcon(weatherCondition);
+</script>
+
+
+<script>
+// implement storing dark/light mode to local browser storage and theme switch logic
+
+let darkmode = localStorage.getItem('darkmode')
+const themeSwitch = document.getElementById('theme-switch')
+const widget = document.querySelector('.tomorrow')
+
+const enableDarkmode = () => {
+    document.body.classList.add('darkmode')
+    localStorage.setItem('darkmode', 'active')
+}
+
+const disableDarkmode = () => {
+    document.body.classList.remove('darkmode')
+    localStorage.setItem('darkmode', null)
+}
+
+if(darkmode === 'active') enableDarkmode;
+
+themeSwitch.addEventListener("click", () => {
+    darkmode = localStorage.getItem('darkmode')
+    darkmode !== "active" ? enableDarkmode() : disableDarkmode();
+})
+</script>
+
+
+<!-- chat logic -->
+<script>
+    // Handle form submission asynchronously (AJAX)
+    document.getElementById("chatForm").addEventListener("submit", function(event) {
+        event.preventDefault();  // Prevent form submission from refreshing the page
+        
+        const userMessage = document.getElementById("userMessage").value;
+
+        if (userMessage) {
+            // Make an AJAX request to the server
+            fetch("{% url 'dashboard' %}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value
+                },
+                body: JSON.stringify({ message: userMessage })  // Send the user message in the body of the request
+            })
+            .then(response => response.json())  // Expect JSON response
+            .then(data => {
+                // Display the chatbot response dynamically
+                const chatbotResponseDiv = document.getElementById("chatbotResponse");
+                chatbotResponseDiv.innerHTML = `<p>Chatbot says: ${data.response}</p>`;
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
+        }
+    });
+</script>
+
+
+</body>
+</html>

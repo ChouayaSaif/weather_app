@@ -1,0 +1,9 @@
+Django>=4.0,<5.0
+mysqlclient
+prometheus-client
+gunicorn
+django-allauth
+requests
+pytz
+requests
+pip install chatterbox-corpus
