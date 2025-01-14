@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   django-app:
     build:
@@ -9,6 +11,8 @@ services:
       - .env
     depends_on:
       - db
+    networks:
+      - app_network  # Specify the custom network
 
   db:
     image: mysql:8.0
@@ -22,9 +26,15 @@ services:
       MYSQL_PASSWORD: ${DB_PASSWORD}
     volumes:
       - mysql_data:/var/lib/mysql
+    networks:
+      - app_network  # Specify the custom network
 
 volumes:
   mysql_data:
+
+networks:
+  app_network:  # Define the custom network
+    driver: bridge
 
 
   # prometheus:

@@ -39,12 +39,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'weather',
+    'rest_framework',
     # The following apps are required:
     'django.contrib.sites',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
+    'drf_yasg'
 ]
 
 SITE_ID = 1
@@ -86,26 +88,24 @@ WSGI_APPLICATION = 'weather_app.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-        # 'ENGINE': 'django.db.backends.mysql',
-        # 'NAME': 'weather_db',  # Name of your database
-        # 'USER': 'user',          # MySQL username
-        # 'PASSWORD': 'saifch',    # MySQL password
-        # 'HOST': 'localhost',     # Use 'localhost' for local MySQL server
-        # 'PORT': '3310',          # Default MySQL port
-    }
     # 'default': {
-    #     #'ENGINE': 'django.db.backends.sqlite3',
-    #     #'NAME': BASE_DIR / 'db.sqlite3',
+    #     # 'ENGINE': 'django.db.backends.sqlite3',
+    #     # 'NAME': BASE_DIR / 'db.sqlite3',
     #     'ENGINE': 'django.db.backends.mysql',
-    #     'NAME': 'weather_db_1',  # Make sure this matches the name of your database
-    #     'USER': 'user',           # The MySQL user you want to use
-    #     'PASSWORD': 'saifch',    # The password for the MySQL user
-    #     'HOST': 'db',      # Use the appropriate host, e.g., localhost or a Docker container IP
-    #     'PORT': '3306',
+    #     'NAME': 'weather_db',  # Name of your database
+    #     'USER': 'user',          # MySQL username
+    #     'PASSWORD': 'saifch',    # MySQL password
+    #     'HOST': 'localhost',     # Use 'localhost' for local MySQL server
+    #     'PORT': '3310',          # Default MySQL port
     # }
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'weather_db_1',  # Database name
+        'USER': 'user',           # MySQL user
+        'PASSWORD': 'saifch',     # MySQL password
+        'HOST': 'db',             # MySQL service name defined in docker-compose.yml
+        'PORT': '3306',           # MySQL port inside the container
+    }
 }
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URI = 'http://127.0.0.1:8000/accounts/google/login/callback/'
@@ -173,3 +173,14 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [
     BASE_DIR / "static",  # Or another path where you store static files during development
 ]
+
+# Set Up DRF in settings.py: Add a basic DRF configuration (optional)
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+    ],
+}

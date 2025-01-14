@@ -1,0 +1,24 @@
+# Use the slim version of Python 3.11
+FROM python:3.11-slim
+
+# Set the working directory
+WORKDIR /app
+
+# Install system dependencies required for mysqlclient
+RUN apt-get update && apt-get install -y \
+    gcc \
+    libmariadb-dev \
+    libmariadb-dev-compat \
+    pkg-config \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install or upgrade setuptools
+RUN pip install --upgrade setuptools
+
+# Copy the requirements file (for package installation)
+COPY requirements.txt .
+
+# Install Python dependencies from the requirements file
+COPY pip_cache /app/pip_cache
+RUN pip install --no-cache-dir --find-links=/app/pip_cache -r requirements.txt --default-timeout=600 --index-url=https://pypi.org/simple

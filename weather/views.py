@@ -8,6 +8,10 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from weather.chatbot import ask_chatbot
 import json
+from rest_framework.response import Response
+
+from rest_framework.views import APIView
+
 
 def home(request):
     return render(request, 'home.html')
@@ -257,3 +261,29 @@ def dashboard(request):
 
     return render(request, 'dashboard.html', context)
 
+class WeatherDataAPIView(APIView):
+    def get(self, request, location):
+        # Fetch weather data for the given location
+        weather_data = daily_recommendations(location)
+        return Response(weather_data)
+
+class ChatbotAPIView(APIView):
+    def post(self, request):
+        # Get message from the user
+        user_message = request.data.get('message')
+        if user_message:
+            response = ask_chatbot(user_message)
+            return Response({'response': response})
+        else:
+            return Response({'response': 'No message provided'}, status=400)
+
+class PlannedRecommendationsAPIView(APIView):
+    def post(self, request):
+        # Fetch planned weather recommendations based on days_ahead and location
+        location = request.data.get('location')
+        days_ahead = request.data.get('days_ahead')
+        if location and days_ahead:
+            planned_recs = planned_recommendations(location, days_ahead)
+            return Response({'planned_recommendations': planned_recs})
+        else:
+            return Response({'error': 'Invalid data provided'}, status=400)
