@@ -1,9 +1,11 @@
 Django>=4.0,<5.0
-mysqlclient
-prometheus-client
-gunicorn
-django-allauth
-requests
-pytz
-requests
-pip install chatterbox-corpus
+mysqlclient>=2.1.0
+prometheus-client>=0.21.0
+gunicorn>=23.0.0
+django-allauth>=0.65.0
+requests>=2.31.0
+pytz>=2023.3
+PyJWT>=2.0.0
+drf-yasg>=1.21.0
+cryptography
+#chatterbox-corpus

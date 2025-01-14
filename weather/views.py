@@ -15,6 +15,10 @@ def home(request):
 @login_required
 def dashboard(request):
 
+    # Initialize preferences and default_location_value
+    preferences = None
+    default_location_value = 'manouba'  # Default fallback location
+
     # Debugging 1: trying to assign the default_location to location_name variable
     try:
         preferences = UserPreferences.objects.get(user=request.user)
@@ -80,7 +84,13 @@ def dashboard(request):
     }
 
     # Widget configuration context
-    location_name = request.POST.get('location', default_location_value if preferences else 'manouba').lower()  # Default to user-preferred location
+    # Safely handle location_name
+    location_name = request.POST.get('location') or default_location_value or 'manouba'
+    if location_name:
+        location_name = location_name.lower()
+    else:
+        location_name = 'manouba'  # Fallback to a default value if all else fails
+
     location_id = location_mapping.get(location_name, "106982")  # Default to 'manouba' if not found
     coordinates = coordinates_mapping.get(location_name, {'lat': 36.8081, 'lon': 10.0863})  # Default to 'manouba' coordinates
 
@@ -104,7 +114,7 @@ def dashboard(request):
 
     # Filling last widget
     # Retrieve user preferences for the logged-in user
-    user_preferences = UserPreferences.objects.get(user=request.user)
+    user_preferences, created = UserPreferences.objects.get_or_create(user=request.user)
     
     # Access the favorite locations as a list of strings (no need to use .id since it's a list of strings)
     favorite_locations = user_preferences.favorite_locations  # It's already a list of strings
@@ -113,7 +123,13 @@ def dashboard(request):
     print(favorite_locations)
 
     # Split the string into individual locations by comma
-    locations_list = favorite_locations[0].split(', ')
+    # Safely handle favorite_locations
+    if favorite_locations and len(favorite_locations) > 0:
+        # Split the string into individual locations by comma
+        locations_list = favorite_locations[0].split(', ')
+    else:
+        # Default to an empty list if no favorite locations are set
+        locations_list = []
     print(locations_list)
 
     # Set variables for each location from the list

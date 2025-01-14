@@ -1,5 +1,3 @@
-version: '3.9'
-
 services:
   django-app:
     build:
@@ -7,11 +5,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8000:8000"
-    environment:
-      - DJANGO_DB_HOST=db
-      - DJANGO_DB_NAME=weather_db
-      - DJANGO_DB_USER=root
-      - DJANGO_DB_PASSWORD=example
+    env_file:
+      - .env
     depends_on:
       - db
 
@@ -21,37 +16,37 @@ services:
     ports:
       - "3309:3306"
     environment:
-      MYSQL_ROOT_PASSWORD: example
-      MYSQL_DATABASE: weather_db_1
-      MYSQL_USER: user
-      MYSQL_PASSWORD: saifch
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
     volumes:
       - mysql_data:/var/lib/mysql
 
-  prometheus:
-    image: prom/prometheus
-    container_name: prometheus1
-    ports:
-      - "9091:9090"
-    volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
-
-  grafana:
-    image: grafana/grafana
-    container_name: grafana1
-    ports:
-      - "3001:3000"
-    environment:
-      - GF_SECURITY_ADMIN_PASSWORD=admin
-    volumes:
-      - grafana_data:/var/lib/grafana
-
-  node-exporter:
-    image: prom/node-exporter
-    container_name: node_exporter
-    ports:
-      - "9100:9100"
-
 volumes:
   mysql_data:
-  grafana_data:
+
+
+  # prometheus:
+  #   image: prom/prometheus
+  #   container_name: prometheus1
+  #   ports:
+  #     - "9091:9090"
+  #   volumes:
+  #     - ./prometheus.yml:/etc/prometheus/prometheus.yml
+
+  # grafana:
+  #   image: grafana/grafana
+  #   container_name: grafana1
+  #   ports:
+  #     - "3001:3000"
+  #   environment:
+  #     - GF_SECURITY_ADMIN_PASSWORD=admin
+  #   volumes:
+  #     - grafana_data:/var/lib/grafana
+
+  # node-exporter:
+  #   image: prom/node-exporter
+  #   container_name: node_exporter
+  #   ports:
+  #     - "9100:9100"

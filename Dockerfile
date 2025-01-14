@@ -17,8 +17,8 @@ RUN apt-get update && apt-get install -y \
 COPY requirements.txt .
 
 # Install Python dependencies
-RUN pip install --no-cache-dir -r requirements.txt
-
+COPY pip_cache /app/pip_cache
+RUN pip install --no-cache-dir --find-links=/app/pip_cache -r requirements.txt --default-timeout=100
 # Copy the application code
 COPY . .
 
