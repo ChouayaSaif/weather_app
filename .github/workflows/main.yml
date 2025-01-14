@@ -1,4 +1,4 @@
-name: Build & Deploy Django Application
+name: CI/CD Pipeline for Django App
 
 on:
   push:
@@ -6,23 +6,27 @@ on:
       - main
 
 jobs:
-  build:
-    name: Build and Deploy Application
+  build-and-deploy:
+    name: Build and Deploy Django App
     runs-on: ubuntu-latest
 
     services:
       mysql:
         image: mysql:8.0
         ports:
-          - 3309:3306
+          - 3306:3306
         env:
-          MYSQL_ROOT_PASSWORD: password
-          MYSQL_DATABASE: weather_db
-          MYSQL_USER: user
-          MYSQL_PASSWORD: saifch
-        options: --health-cmd="mysqladmin ping --silent" --health-interval=10s --health-timeout=5s --health-retries=3
+          MYSQL_ROOT_PASSWORD: rootpassword
+          MYSQL_DATABASE: ${{ secrets.DB_NAME }}
+          MYSQL_USER: ${{ secrets.DB_USER }}
+          MYSQL_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
 
-     steps:
+    steps:
       - name: Checkout Code
         uses: actions/checkout@v2
 
