@@ -35,28 +35,3 @@ volumes:
 networks:
   app_network:  # Define the custom network
     driver: bridge
-
-
-  # prometheus:
-  #   image: prom/prometheus
-  #   container_name: prometheus1
-  #   ports:
-  #     - "9091:9090"
-  #   volumes:
-  #     - ./prometheus.yml:/etc/prometheus/prometheus.yml
-
-  # grafana:
-  #   image: grafana/grafana
-  #   container_name: grafana1
-  #   ports:
-  #     - "3001:3000"
-  #   environment:
-  #     - GF_SECURITY_ADMIN_PASSWORD=admin
-  #   volumes:
-  #     - grafana_data:/var/lib/grafana
-
-  # node-exporter:
-  #   image: prom/node-exporter
-  #   container_name: node_exporter
-  #   ports:
-  #     - "9100:9100"

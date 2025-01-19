@@ -1,23 +1,24 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from .models import UserPreferences, Place
 from weather.weather_api import get_weather_data
 from weather.daily_recommendations import daily_recommendations
 from weather.planned_recommendations import planned_recommendations
-from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from weather.chatbot import ask_chatbot
 import json
 from rest_framework.response import Response
 
 from rest_framework.views import APIView
-from .serializers import PlaceSerializer, UserPreferencesSerializer
+from .serializers import PlaceSerializer
 from rest_framework import status
 
 # Pagination Imports
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.generics import ListAPIView
 
+# utility function import 
+from .utils import generate_links
 
 
 def home(request):
@@ -285,32 +286,41 @@ class WeatherDataAPIView(APIView):
     API view to fetch and return weather data for a given location.
     """
     def get(self, request, location, *args, **kwargs):
-        
         try:
-            # Fetch weather data
             weather_data = get_weather_data(location)
-            
-            # Debugging: Print the fetched weather data
-            print(f"Fetched weather data: {weather_data}")
-            
-            # Check if data is successfully fetched
             if weather_data is None:
-                return Response({
-                    "error": "Weather data could not be retrieved for the given location."
-                }, status=404)
+                return Response({"error": "Weather data could not be retrieved for the given location."}, status=404)
             
-            # Return the fetched weather data as the response
-            return Response(weather_data)
-    
+            # Generate HATEOAS links
+            links = generate_links(request, location_name=location)
+            
+            # Include links in the response
+            response_data = {
+                "weather_data": weather_data,
+                "_links": links
+            }
+            return Response(response_data)
         except Exception as e:
-                return Response({"error": str(e)}, status=500)
+            return Response({"error": str(e)}, status=500)
 
 
 class ChatbotAPIView(APIView):
+    """
+    API view to get get chatbot responss. 
+    """
     def post(self, request, message):  
         try:
             response = ask_chatbot(message)
-            return Response(response)
+            
+            # Generate HATEOAS links
+            links = generate_links(request)
+            
+            # Include links in the response
+            response_data = {
+                "response": response,
+                "_links": links
+            }
+            return Response(response_data)
         except Exception as e:
             return Response({
                 "error": f"Could not fetch recommendations: {str(e)}"
@@ -318,6 +328,9 @@ class ChatbotAPIView(APIView):
 
 
 class PlannedRecommendationsAPIView(APIView):
+    """
+    API view to get recommendations based on weather data and days of forecasting.
+    """
     def post(self, request):
         try:
             # Fetch planned weather recommendations based on days_ahead and location
@@ -325,7 +338,16 @@ class PlannedRecommendationsAPIView(APIView):
             days_ahead = request.data.get('days_ahead')
             if location and days_ahead:
                 planned_recs = planned_recommendations(location, days_ahead)
-                return Response({'planned_recommendations': planned_recs})
+                
+                # Generate HATEOAS links
+                links = generate_links(request, location_name=location)
+                
+                # Include links in the response
+                response_data = {
+                    "planned_recommendations": planned_recs,
+                    "_links": links
+                }
+                return Response(response_data)
             else:
                 return Response({'error': 'Invalid data provided'}, status=400)
         except Exception as e:
@@ -377,7 +399,7 @@ class DailyRecommendationsAPIView(ListAPIView):
         API view to get daily recommendations for a specific location.
     """
     serializer_class = PlaceSerializer
-    pagination_class = CustomPagination  # Use custom pagination
+    pagination_class = CustomPagination
 
     def get_queryset(self):
         location_name = self.kwargs['location_name']
@@ -386,6 +408,17 @@ class DailyRecommendationsAPIView(ListAPIView):
             return recommendations
         except Exception as e:
             return []
+
+    def list(self, request, *args, **kwargs):
+        response = super().list(request, *args, **kwargs)
+        
+        # Generate HATEOAS links
+        location_name = self.kwargs['location_name']
+        links = generate_links(request, location_name=location_name)
+        
+        # Include links in the response
+        response.data["_links"] = links
+        return response
 
 
 

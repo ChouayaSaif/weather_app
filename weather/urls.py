@@ -14,4 +14,5 @@ urlpatterns = [
     path('api/v1/Planned-Recommendations/', PlannedRecommendationsAPIView.as_view(), name='planned-recommendations-api'),
     path('api/v1/User-Preferences/preferences/', UserPreferencesAPIView.as_view(), name='user-preferences'),
     path('api/v1/Daily-Recommendations/<str:location_name>/', DailyRecommendationsAPIView.as_view(), name='daily-recommendations'),
+    path('api/v1/Update-Preferences/<str:field>/<str:value>/', UpdateUserPreferences.as_view(), name='update-user-preferences'),
 ]
