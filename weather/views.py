@@ -331,28 +331,36 @@ class PlannedRecommendationsAPIView(APIView):
     """
     API view to get recommendations based on weather data and days of forecasting.
     """
-    def post(self, request):
+    serializer_class = PlaceSerializer
+
+    def post(self, request, location, days_ahead):
         try:
-            # Fetch planned weather recommendations based on days_ahead and location
-            location = request.data.get('location')
-            days_ahead = request.data.get('days_ahead')
-            if location and days_ahead:
-                planned_recs = planned_recommendations(location, days_ahead)
-                
-                # Generate HATEOAS links
-                links = generate_links(request, location_name=location)
-                
-                # Include links in the response
-                response_data = {
-                    "planned_recommendations": planned_recs,
-                    "_links": links
-                }
-                return Response(response_data)
-            else:
-                return Response({'error': 'Invalid data provided'}, status=400)
+            # Validate the data
+            if not location or not isinstance(location, str):
+                return Response({'error': 'Invalid or missing location'}, status=status.HTTP_400_BAD_REQUEST)
+            try:
+                days_ahead = int(days_ahead)
+                if days_ahead < 1:
+                    return Response({'error': 'days_ahead must be a positive integer'}, status=status.HTTP_400_BAD_REQUEST)
+            except ValueError:
+                return Response({'error': 'days_ahead must be an integer'}, status=status.HTTP_400_BAD_REQUEST)
+
+            # Fetch planned weather recommendations
+            planned_recs = planned_recommendations(location, days_ahead)
+
+            # Check if the response contains an error
+            if isinstance(planned_recs, dict) and "error" in planned_recs:
+                return Response(planned_recs, status=status.HTTP_404_NOT_FOUND)
+
+            # Serialize the recommendations
+            serializer = self.serializer_class(planned_recs, many=True)
+
+            # Return the serialized data
+            return Response(serializer.data, status=status.HTTP_200_OK)
         except Exception as e:
-            return Response({"error": str(e)}, status=500)
-        
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
 
 
 class UserPreferencesAPIView(APIView):

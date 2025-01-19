@@ -270,7 +270,16 @@
         background-color: #f8f9fa; /* Optional: for a slight background contrast */
     }
 
-    
+    .scrollable-container {
+    max-height: 300px; /* Set a fixed height */
+    overflow-y: auto; /* Enable vertical scrolling */
+    border: 1px solid #ccc; /* Optional: Add a border for visibility */
+    padding: 10px; /* Optional: Add padding for better spacing */
+    margin-top: 10px; /* Optional: Add space from above elements */
+}
+.recommendation-box {
+    margin-bottom: 15px; /* Space between recommendation boxes */
+}
 
     </style>
 </head>
@@ -543,7 +552,7 @@
                                 <p style="color: #121212; font-family: 15px;"><strong>Location:</strong> {{ place.location }}</p>
                             </div>
                         {% empty %}
-                            <p style="font-family: 15px;">No recommendations available for the current weather.</p>
+                            <p style="font-family: 15px; color: black;">No recommendations available for the current weather.</p>
                         {% endfor %}
                     </div>
                 </section>
@@ -571,17 +580,20 @@
                             <button type="submit">Get Forecast</button>
                         </form>
                         
-                        {% for place in planned_weather_data %}
-                            <div class="recommendation-box">
-                                <h2 style="font-size: 20px; color: black;">{{ place.name }}</h2>
-                                <p style="font-size: 15px; color: black;">{{ place.description }}</p>
-                                <p style="font-family: 15px; color: black;"><strong>Location:</strong> {{ place.location }}</p>
-                            </div>
-                        {% empty %}
-                            <p style="font-family: 15px; color: black;">No recommendations available for the current weather.</p>
-                        {% endfor %}
+                        <!-- Scrollable container -->
+                        <div class="scrollable-container">
+                            {% for place in planned_weather_data %}
+                                <div class="recommendation-box">
+                                    <h2 style="font-size: 20px; color: black;">{{ place.name }}</h2>
+                                    <p style="font-size: 15px; color: black;">{{ place.description }}</p>
+                                    <p style="font-family: 15px; color: black;"><strong>Location:</strong> {{ place.location }}</p>
+                                </div>
+                            {% empty %}
+                                <p style="font-family: 15px; color: black;">No recommendations available for the current weather.</p>
+                            {% endfor %}
+                        </div>
                     </div>
-                </section>
+                </section>                
                 <section class="card">
                     <div class="card-header bg-info text-white" style="height: 40px; margin-top: -5px;">
                         <h3 class="text-center" style="font-size: 1.3rem;">Chatbot</h3>

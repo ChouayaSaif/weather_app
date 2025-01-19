@@ -21,7 +21,7 @@ def daily_recommendations(city="Tunis"):
 
     # Debugging 8: Comparing value of weather_type = 'clear sky' or not --> False: dismatch btw them
     print(weather=="clear sky")
-    print(weather) # Found Bug: weather returns: {'city': 'Tunisia', 'temperature': 11.6, 'condition': 'clear sky', 'humidity': 58, 'wind_speed': 1.73, 'date_time': '2024-12-30 01:52:41'}
+    print(f'weather today:{weather}') # Found Bug: weather returns: {'city': 'Tunisia', 'temperature': 11.6, 'condition': 'clear sky', 'humidity': 58, 'wind_speed': 1.73, 'date_time': '2024-12-30 01:52:41'}
                    # or it should return : weather.condition
 
 
