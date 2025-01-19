@@ -12,7 +12,7 @@ services:
     depends_on:
       - db
     networks:
-      - app_network  # Specify the custom network
+      - app_network 
 
   db:
     image: mysql:8.0
@@ -27,11 +27,11 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
     networks:
-      - app_network  # Specify the custom network
+      - app_network  
       
 volumes:
   mysql_data:
 
 networks:
-  app_network:  # Define the custom network
+  app_network:
     driver: bridge

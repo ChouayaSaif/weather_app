@@ -312,15 +312,7 @@ class ChatbotAPIView(APIView):
         try:
             response = ask_chatbot(message)
             
-            # Generate HATEOAS links
-            links = generate_links(request)
-            
-            # Include links in the response
-            response_data = {
-                "response": response,
-                "_links": links
-            }
-            return Response(response_data)
+            return Response(response)
         except Exception as e:
             return Response({
                 "error": f"Could not fetch recommendations: {str(e)}"
