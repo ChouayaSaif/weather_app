@@ -28,7 +28,7 @@ services:
       - mysql_data:/var/lib/mysql
     networks:
       - app_network  # Specify the custom network
-
+      
 volumes:
   mysql_data:
 

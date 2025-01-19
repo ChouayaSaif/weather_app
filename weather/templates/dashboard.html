@@ -263,6 +263,15 @@
         margin-bottom: 5px;  /* Space between paragraphs */
     }
 
+    .scrollable-container {
+        max-height: 300px; /* Adjust as needed */
+        overflow-y: auto; /* Adds vertical scroll */
+        padding: 10px;
+        background-color: #f8f9fa; /* Optional: for a slight background contrast */
+    }
+
+    
+
     </style>
 </head>
 <body>
@@ -294,7 +303,7 @@
             </div>
             <div style="display: flex; align-items: center; gap: 20px;">
                 <div class="large-font">
-                    <img src="{% static 'images/logo.png' %}" width="300" height="200" style="margin-left: 30px; margin-right: -30px ;" alt="Tunisia logo">
+                    <img src="{% static 'images/logo.png' %}" width="300" height="200" style="margin-left: 30px; margin-right: -30px;" alt="Tunisia logo">
                 </div>
                 <form method="POST" action="{% url 'dashboard' %}" style="flex-grow: 1; margin: 0;">
                     {% csrf_token %}
@@ -303,15 +312,15 @@
                             <input type="text" id="location" name="location" class="form-control" 
                             placeholder="Enter a Tunisian city, e.g., Kairouan" required 
                             style="padding-left: 30px; width: 100%;"
-                            value="{% if preferences.default_location %}{{ preferences.default_location }}{% else %}{{ '' }}{% endif %}">                            
-                            <span style="margin-left: -5px ;position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 16px; color: gray; cursor: pointer;" onclick="document.querySelector('button').click();">
+                            value="{% if request.POST.location %}{{ request.POST.location }}{% elif preferences.default_location %}{{ preferences.default_location }}{% else %}{{ '' }}{% endif %}">
+                            <span style="margin-left: -5px; position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 16px; color: gray; cursor: pointer;" onclick="document.querySelector('button').click();">
                                 &#128269;
                             </span>
                         </div>
                         <button type="submit" style="padding: 8px; font-size: 14px; max-width: 100px; margin-left: 10px; white-space: nowrap;">Get Weather</button>
                     </div>
                 </form>                
-            </div>
+            </div>            
         </header>
 
         <!-- Main container with two sections -->
@@ -467,68 +476,71 @@
                 <div style="display: flex; flex-direction: column; gap: 20px; max-width: 300px;">
                 <section class="card">
                     <div class="card-header bg-info text-white" style="height: 40px; margin-top: -10px;">
-                        <h3  style="font-size: 25px;" class="text-center">User Preferences</h3>
+                        <h3 style="font-size: 25px;" class="text-center">User Preferences</h3>
                     </div>
                     <form method="POST" style="color: black;">
                         {% csrf_token %}
                         <h2 style="font-size: 20px;">Update Your Preferences</h2>
-                        
+                
                         <!-- Default Location -->
                         <label for="defaultLocation">Default Location:</label>
                         <input type="text" name="defaultLocation" 
-                        value="{% if preferences.default_location %}{{ preferences.default_location }}{% else %}{{ '' }}{% endif %}"> 
+                                value="{% if preferences %}{{ preferences.default_location }}{% else %}{{ '' }}{% endif %}">
+                
                         <!-- Favorite Locations -->
                         <label for="favoriteLocations">Favorite Locations (comma separated):</label>
                         <input type="text" name="favoriteLocations" 
-                            value="{% if favorite_locations %}{{ favorite_locations|join:',' }}{% else %}{{ '' }}{% endif %}">
+                                value="{% if preferences.favorite_locations %}{{ preferences.favorite_locations|join:',' }}{% else %}{{ '' }}{% endif %}">
                         <div>
                             <ul>
-                                {% for location in favorite_locations %}
+                                {% for location in preferences.favorite_locations %}
                                     <li>{{ location }}</li>
                                 {% empty %}
                                     <li>No favorite locations set.</li>
                                 {% endfor %}
                             </ul>
                         </div>
+                
                         <!-- Language -->
                         <label for="language">Language:</label>
                         <select name="language">
-                            <option value="en" {% if preferences and preferences.language == 'en' %}selected{% endif %}>English</option>
-                            <option value="fr" {% if preferences and preferences.language == 'fr' %}selected{% endif %}>French</option>
+                            <option value="en" {% if preferences.language == 'en' %}selected{% endif %}>English</option>
+                            <option value="fr" {% if preferences.language == 'fr' %}selected{% endif %}>French</option>
                         </select>
-                        
+                
                         <!-- Temperature Units -->
                         <label for="temperatureUnits">Temperature Units:</label>
                         <select name="temperatureUnits">
-                            <option value="Celsius" {% if preferences and preferences.temperature_units == 'Celsius' %}selected{% endif %}>Celsius</option>
-                            <option value="Fahrenheit" {% if preferences and preferences.temperature_units == 'Fahrenheit' %}selected{% endif %}>Fahrenheit</option>
+                            <option value="Celsius" {% if preferences.temperature_units == 'Celsius' %}selected{% endif %}>Celsius</option>
+                            <option value="Fahrenheit" {% if preferences.temperature_units == 'Fahrenheit' %}selected{% endif %}>Fahrenheit</option>
                         </select>
-                        
+                
                         <!-- Alerts -->
                         <label for="alertTempOver35">Alert for temperature over 35°C:</label>
-                        <input type="checkbox" name="alertTempOver35" {% if preferences and preferences.alert_temp_over_35 %}checked{% endif %}>
-                        
+                        <input type="checkbox" name="alertTempOver35" {% if preferences.alert_temp_over_35 %}checked{% endif %}>
+                
                         <label for="alertRain">Alert for rain:</label>
-                        <input type="checkbox" name="alertRain" {% if preferences and preferences.alert_rain %}checked{% endif %}>
-                        
+                        <input type="checkbox" name="alertRain" {% if preferences.alert_rain %}checked{% endif %}>
+                
                         <button type="submit">Save Preferences</button>
                     </form>
-                    
+                
                     {% if message %}
                         <p>{{ message }}</p>
                     {% endif %}
-                    
-                </section>
+                </section>                       
                 <section class="card">
-                    <div class="card-header bg-info text-white" style="height:40px;">
-                        <h3 class="text-center" style="font-size: 1.2rem;">Daily Recommendations</h3>
+                    <div class="card-header bg-info text-white" style="height: 40px;">
+                        <h3 class="text-center my-30" style="font-size: 0.8rem;">
+                            Daily Recommendations
+                        </h3>
                     </div>
-                    <div class="text-black">
+                    <div class="scrollable-container">
                         {% for place in daily_recommendations %}
                             <div class="recommendation-box">
-                                <h2 style="font-size: 20px;">{{ place.name }}</h2>
-                                <p style="font-size: 15px;">{{ place.description }}</p>
-                                <p style="font-family: 15px;"><strong>Location:</strong> {{ place.location }}</p>
+                                <h2 style="color: #121212; font-size: 20px;">{{ place.name }}</h2>
+                                <p style="color: #121212; font-size: 15px;">{{ place.description }}</p>
+                                <p style="color: #121212; font-family: 15px;"><strong>Location:</strong> {{ place.location }}</p>
                             </div>
                         {% empty %}
                             <p style="font-family: 15px;">No recommendations available for the current weather.</p>
@@ -537,7 +549,9 @@
                 </section>
                 <section class="card">
                     <div class="card-header bg-info text-white" style="height: 40px;">
-                        <h3 class="text-center" style="font-size: 1.1rem;">Planned Recommendations</h3>
+                        <h3 class="text-center my-30" style="font-size: 0.8rem;">
+                            Planned Recommendations
+                        </h3>
                     </div>
                     <div class="text-black">
                         <form method="POST">

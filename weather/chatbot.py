@@ -1,23 +1,21 @@
-# chatbot.py
 import os
 import requests
 import json
 
-# API Key and endpoint
-XAI_API_KEY = "xai-I3yN6jKSnG699mFiw3X2S13Hi7ZgqVPfgXiTPDihfen0FvCj489RWNgpmmD7Q68LFo4iFtE9d7xlDPCw"
-url = "https://api.x.ai/v1/chat/completions"
+# API Key and endpoint for Groq API
+GROQ_API_KEY = "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"
+url = "https://api.groq.com/openai/v1/chat/completions"
 
 # Headers for authentication
 headers = {
     "Content-Type": "application/json",
-    "Authorization": f"Bearer {XAI_API_KEY}",
+    "Authorization": f"Bearer {GROQ_API_KEY}",
 }
 
 # Initialize conversation history with system message
 messages = [
     {"role": "system", "content": "You are a helpful chatbot."}
 ]
-
 
 def weather_data(location="Tunisia"):
     API_KEY = "7613c6caddbac6c8549b60a388f6b45c"
@@ -32,8 +30,6 @@ def weather_data(location="Tunisia"):
         return f"The current temperature in {location} is {temperature}°C with {weather_description}."
     else:
         return "Sorry, I couldn't retrieve weather data at the moment."
-    
-
 
 def ask_chatbot(user_message):
     # Append the user's message to the conversation history
@@ -46,13 +42,13 @@ def ask_chatbot(user_message):
 
     # The data to send in the request to the chatbot
     data = {
+        "model": "llama-3.3-70b-versatile",  # Groq model you want to use
         "messages": messages,
-        "model": "grok-beta",  # or another model you want to use
         "stream": False,
         "temperature": 0
     }
 
-    # Send the request
+    # Send the request to the Groq API
     response = requests.post(url, headers=headers, data=json.dumps(data))
 
     # Check the response status

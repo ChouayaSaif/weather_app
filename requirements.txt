@@ -9,4 +9,5 @@ PyJWT>=2.0.0
 drf-yasg>=1.21.0
 cryptography
 djangorestframework
+django-prometheus
 #chatterbox-corpus

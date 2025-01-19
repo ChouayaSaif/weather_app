@@ -38,7 +38,9 @@ def get_weather_data(location):
             city_time = datetime.utcfromtimestamp(weather_data['dt'] + timezone_offset)
             city_time_formatted = city_time.strftime('%Y-%m-%d %H:%M:%S')
 
-            print(weather_data['weather'][0]['description'])  # Debugging
+            # Debugging
+            print(f'all data: {weather_data}["weather"][0]')
+            print(f'condition: {weather_data['weather'][0]['description']}')
 
             return {
                 'city': weather_data.get('name', 'Unknown'),

@@ -21,6 +21,7 @@ from django.conf.urls.static import static
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
+
 swagger_view = get_schema_view(
     openapi.Info(
         title="Weather API",
@@ -33,7 +34,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('allauth.urls')),
     path('', include('weather.urls')),  # Include the weather app's URLs
-    path('swagger/',swagger_view.with_ui('swagger'))
+    path('swagger/',swagger_view.with_ui('swagger')),
 ]
 
 # Use static() to serve static files in development

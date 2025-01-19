@@ -6,6 +6,7 @@ class UserPreferencesSerializer(serializers.ModelSerializer):
         model = UserPreferences
         fields = '__all__'
 
+# Django's response object tries to return an instance of a class (in this case, Place) that cannot be automatically converted to JSON
 class PlaceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Place
