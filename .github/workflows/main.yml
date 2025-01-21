@@ -37,7 +37,7 @@ jobs:
         run: |
           docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ env.BASE_IMAGE_NAME }}:latest -f Dockerfile.base .
 
-      # Build the main app image using Dockerfile
+      # Build the Django app image using Dockerfile
       - name: Build Django app image
         run: |
           docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:latest -f Dockerfile .
