@@ -1,68 +1,92 @@
-name: CI/CD Pipeline for Django App
+name: Docker Image CI
 
 on:
   push:
-    branches:
-      - main
+    branches: [ "main" ]
   pull_request:
-
-env:
-  IMAGE_NAME: django-app
-  BASE_IMAGE_NAME: my-weather-app-base
+    branches: [ "main" ]
 
 jobs:
-  build-and-push:
+
+  build:
+
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout the repository
-      - name: Checkout repository
-        uses: actions/checkout@v3
+    - uses: actions/checkout@v4
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
 
-      # Log in to Docker Hub
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_ACCESS_TOKEN }}
 
-      # Install Docker Compose
-      - name: Install Docker Compose
-        run: |
-          sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-          sudo chmod +x /usr/local/bin/docker-compose
 
-      # Build the base image from Dockerfile.base
-      - name: Build base image
-        run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ env.BASE_IMAGE_NAME }}:latest -f Dockerfile.base .
 
-      # Build the Django app image using Dockerfile
-      - name: Build Django app image
-        run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:latest -f Dockerfile .
 
-      # Push the base image to Docker Hub
-      - name: Push base image to Docker Hub
-        run: |
-          docker push ${{ secrets.DOCKER_USERNAME }}/${{ env.BASE_IMAGE_NAME }}:latest
 
-      # Push the Django app image to Docker Hub
-      - name: Push Django app image to Docker Hub
-        run: |
-          docker push ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:latest
+# name: CI/CD Pipeline for Django App
 
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build-and-push
+# on:
+#   push:
+#     branches:
+#       - main
+#   pull_request:
 
-    steps:
-      # Checkout the repository
-      - name: Checkout repository
-        uses: actions/checkout@v3
+# env:
+#   IMAGE_NAME: django-app
+#   BASE_IMAGE_NAME: my-weather-app-base
 
-      # Deploy the containers using docker-compose
-      - name: Deploy containers using Docker Compose
-        run: |
-          docker-compose down
-          docker-compose up -d
+# jobs:
+#   build-and-push:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       # Checkout the repository
+#       - name: Checkout repository
+#         uses: actions/checkout@v3
+
+#       # Log in to Docker Hub
+#       - name: Log in to Docker Hub
+#         uses: docker/login-action@v2
+#         with:
+#           username: ${{ secrets.DOCKER_USERNAME }}
+#           password: ${{ secrets.DOCKER_ACCESS_TOKEN }}
+
+#       # Install Docker Compose
+#       - name: Install Docker Compose
+#         run: |
+#           sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+#           sudo chmod +x /usr/local/bin/docker-compose
+
+#       # Build the base image from Dockerfile.base
+#       - name: Build base image
+#         run: |
+#           docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ env.BASE_IMAGE_NAME }}:latest -f Dockerfile.base .
+
+#       # Build the Django app image using Dockerfile
+#       - name: Build Django app image
+#         run: |
+#           docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:latest -f Dockerfile .
+
+#       # Push the base image to Docker Hub
+#       - name: Push base image to Docker Hub
+#         run: |
+#           docker push ${{ secrets.DOCKER_USERNAME }}/${{ env.BASE_IMAGE_NAME }}:latest
+
+#       # Push the Django app image to Docker Hub
+#       - name: Push Django app image to Docker Hub
+#         run: |
+#           docker push ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:latest
+
+#   deploy:
+#     runs-on: ubuntu-latest
+#     needs: build-and-push
+
+#     steps:
+#       # Checkout the repository
+#       - name: Checkout repository
+#         uses: actions/checkout@v3
+
+#       # Deploy the containers using docker-compose
+#       - name: Deploy containers using Docker Compose
+#         run: |
+#           docker-compose down
+#           docker-compose up -d
