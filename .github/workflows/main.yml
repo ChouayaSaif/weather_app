@@ -28,7 +28,7 @@ jobs:
         docker build -t my-weather-app-base .
         docker tag my-weather-app-base ${{ secrets.DOCKER_USERNAME }}/django-app:latest
 
-    # Push the image to Docker Huub
+    # Push the image to Docker Hub
     - name: Push Docker image
       run: docker push ${{ secrets.DOCKER_USERNAME }}/django-app:latest
 
