@@ -13,19 +13,98 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    # Step 1: Build the base Docker image
+    # Step 1: Set up Docker and Docker Compose
+    - name: Set up Docker
+      uses: docker/setup-buildx-action@v2
+
+    - name: Set up Docker Compose
+      run: |
+        sudo curl -L "https://github.com/docker/compose/releases/download/v2.20.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+        sudo chmod +x /usr/local/bin/docker-compose
+        docker-compose --version
+
+    # Step 2: Load environment variables
+    - name: Load environment variables
+      run: |
+        echo "DB_NAME=weather_db_1" >> .env
+        echo "DB_USER=user" >> .env
+        echo "DB_PASSWORD=saifch" >> .env
+        echo "DB_HOST=db" >> .env
+        echo "DB_PORT=3306" >> .env
+
+    # Step 3: Cache Docker layers (optional)
+    - name: Cache Docker layers
+      uses: actions/cache@v3
+      with:
+        path: /tmp/.buildx-cache
+        key: docker-layers-${{ runner.os }}-${{ hashFiles('**/Dockerfile.base', '**/Dockerfile') }}
+        restore-keys: |
+          docker-layers-${{ runner.os }}-
+
+    # Step 4: Build the base Docker image
     - name: Build the base Docker image
       run: docker build -t my-weather-app-base -f Dockerfile.base .
 
-    # Step 2: Set up Docker Compose
+    # Step 5: Set up Docker Compose
     - name: Set up Docker Compose
       run: docker-compose up -d
 
-    # Step 3: Run tests or other commands (optional)
+    # Step 6: Wait for the database to be ready
+    - name: Wait for database
+      run: |
+        docker-compose exec db bash -c "while ! mysqladmin ping -h localhost -u user -psaifch --silent; do sleep 1; done"
+
+    # Step 7: Run migrations
+    - name: Run migrations
+      run: docker-compose exec django-app python manage.py migrate
+
+    # Step 8: Run tests
     - name: Run tests
       run: docker-compose exec django-app python manage.py test
 
-    # Step 4: Tear down Docker Compose (optional)
+    # Step 9: Tear down Docker Compose
     - name: Tear down Docker Compose
       if: always()
       run: docker-compose down
+
+
+
+
+
+
+
+
+
+
+
+# name: Docker Compose CI
+
+# on:
+#   push:
+#     branches: [ "main" ]
+#   pull_request:
+#     branches: [ "main" ]
+
+# jobs:
+#   build-and-test:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#     - uses: actions/checkout@v4
+
+#     # Step 1: Build the base Docker image
+#     - name: Build the base Docker image
+#       run: docker build -t my-weather-app-base -f Dockerfile.base .
+
+#     # Step 2: Set up Docker Compose
+#     - name: Set up Docker Compose
+#       run: docker-compose up -d
+
+#     # Step 3: Run tests or other commands (optional)
+#     - name: Run tests
+#       run: docker-compose exec django-app python manage.py test
+
+#     # Step 4: Tear down Docker Compose (optional)
+#     - name: Tear down Docker Compose
+#       if: always()
+#       run: docker-compose down
