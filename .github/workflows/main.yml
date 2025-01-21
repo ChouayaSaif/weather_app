@@ -40,18 +40,36 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y gcc libmariadb-dev libmariadb-dev-compat pkg-config
 
+      - name: Set Environment Variables
+        env:
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_HOST: mysql  # Use the service name 'mysql'
+          DB_PORT: 3306   # Default MySQL port
+        run: |
+          echo "DB_NAME=$DB_NAME" >> $GITHUB_ENV
+          echo "DB_USER=$DB_USER" >> $GITHUB_ENV
+          echo "DB_PASSWORD=$DB_PASSWORD" >> $GITHUB_ENV
+          echo "DB_HOST=$DB_HOST" >> $GITHUB_ENV
+          echo "DB_PORT=$DB_PORT" >> $GITHUB_ENV
+
+      - name: Wait for MySQL to be Ready
+        run: |
+          echo "Waiting for MySQL to start..."
+          while ! mysqladmin ping -h"$DB_HOST" -u"$DB_USER" -p"$DB_PASSWORD" --silent; do
+            sleep 1
+          done
+          echo "MySQL is ready!"
+
       - name: Install Python Dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install --no-cache-dir --find-links=/app/pip_cache -r requirements.txt --default-timeout=100
+          pip install --no-cache-dir -r requirements.txt --default-timeout=100
 
       - name: Run Migrations
         run: |
           python manage.py migrate
-
-      # - name: Run Tests
-      #   run: |
-      #     python manage.py test
 
       - name: Build Docker Image
         uses: docker/build-push-action@v2
