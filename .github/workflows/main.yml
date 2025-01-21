@@ -42,8 +42,8 @@ jobs:
           docker-layers-${{ runner.os }}-
 
     # Step 4: Build the base Docker image
-    - name: Build the base Docker image
-      run: docker build -t my-weather-app-base -f Dockerfile.base .
+    # - name: Build the base Docker image
+    #   run: docker build -t my-weather-app-base -f Dockerfile.base .
 
     # Step 5: Set up Docker Compose
     - name: Set up Docker Compose
