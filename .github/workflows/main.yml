@@ -43,17 +43,30 @@ jobs:
     # Step 5: Wait for the database to be ready
     - name: Wait for database
       run: |
-        docker-compose exec db bash -c "while ! mysqladmin ping -h localhost -u user -psaifch --silent; do sleep 1; done"
+        for i in {1..30}; do
+          if docker-compose exec db mysql -h localhost -u user -psaifch -e "SELECT 1;" weather_db_1; then
+            echo "Database is ready!"
+            break
+          else
+            echo "Waiting for database to be ready..."
+            sleep 2
+          fi
+        done
 
-    # Step 6: Run migrations
+    # Step 6: Check if containers are running
+    - name: Check if containers are running
+      run: |
+        docker-compose ps
+
+    # Step 7: Run migrations
     - name: Run migrations
       run: docker-compose exec django-app python manage.py migrate
 
-    # Step 7: Run tests
+    # Step 8: Run tests
     - name: Run tests
       run: docker-compose exec django-app python manage.py test
 
-    # Step 8: Tear down Docker Compose
+    # Step 9: Tear down Docker Compose
     - name: Tear down Docker Compose
       if: always()
       run: docker-compose down
