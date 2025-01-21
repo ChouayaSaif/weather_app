@@ -11,15 +11,15 @@ jobs:
     runs-on: ubuntu-latest
 
     services:
-      db:  # Use 'db' as the service name to match Django settings
+      db:
         image: mysql:8.0
         ports:
           - 3306:3306
         env:
-          MYSQL_ROOT_PASSWORD: rootpassword  # Root password (not used in Django settings)
-          MYSQL_DATABASE: weather_db_1       # Database name
-          MYSQL_USER: user                   # Database user
-          MYSQL_PASSWORD: saifch             # Database password
+          MYSQL_ROOT_PASSWORD: rootpassword
+          MYSQL_DATABASE: weather_db_1
+          MYSQL_USER: user
+          MYSQL_PASSWORD: saifch
         options: >-
           --health-cmd="mysqladmin ping --silent"
           --health-interval=10s
@@ -43,10 +43,15 @@ jobs:
       - name: Wait for MySQL to be Ready
         run: |
           echo "Waiting for MySQL to start..."
-          timeout 120 bash -c 'while ! mysqladmin ping -h"db" -u"user" -p"saifch" --silent; do
+          timeout 300 bash -c 'while ! mysqladmin ping -h"db" -u"user" -p"saifch" --silent; do
             sleep 5
           done'
           echo "MySQL is ready!"
+
+      - name: Debug MySQL Connection
+        run: |
+          echo "Testing MySQL connection..."
+          mysql -h db -u user -psaifch -e "SHOW DATABASES;"
 
       - name: Install Python Dependencies
         run: |
