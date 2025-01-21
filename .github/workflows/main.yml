@@ -1,4 +1,4 @@
-name: CI/CD Pipeline for Dockerized Django App
+name: Build and Push Docker Image
 
 on:
   push:
@@ -6,69 +6,108 @@ on:
       - main
 
 jobs:
-  build-and-deploy:
-    name: Build and Deploy Dockerized Django App
+  build:
     runs-on: ubuntu-latest
 
-    services:
-      db:
-        image: mysql:8.0
-        ports:
-          - 3306:3306
-        env:
-          MYSQL_ROOT_PASSWORD: rootpassword
-          MYSQL_DATABASE: weather_db_1
-          MYSQL_USER: user
-          MYSQL_PASSWORD: saifch
-        options: >-
-          --health-cmd="mysqladmin ping --silent"
-          --health-interval=5s
-          --health-timeout=10s
-          --health-retries=20
-
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v2
+    # Checkout the repository
+    - name: Checkout code
+      uses: actions/checkout@v3
 
-      - name: Set Up Docker
-        uses: docker/setup-qemu-action@v2
+    # Set up Docker
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
 
-      - name: Set Up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+    # Log in to Docker Hub
+    - name: Log in to Docker Hub
+      run: echo "${{ secrets.DOCKER_ACCESS_TOKEN }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
-      - name: Set Up Docker Compose
-        uses: KengoTODA/actions-setup-docker-compose@v1.2.3
+    # Build and tag the Docker image
+    - name: Build and tag Docker image
+      run: |
+        docker build -t my-weather-app-base .
+        docker tag my-weather-app-base ${{ secrets.DOCKER_USERNAME }}/django-app:latest
 
-      - name: Start MySQL Container
-        run: |
-          docker-compose up -d db
+    # Push the image to Docker Hub
+    - name: Push Docker image
+      run: docker push ${{ secrets.DOCKER_USERNAME }}/django-app:latest
 
-      - name: Wait for MySQL to be Ready
-        run: |
-          echo "Waiting for MySQL to start..."
-          timeout 120 bash -c 'while ! docker-compose exec db mysqladmin ping -u"user" -p"saifch" --silent; do
-            sleep 5
-          done'
-          echo "MySQL is ready!"
 
-      - name: Build Application Docker Image
-        run: |
-          docker-compose build django-app
 
-      - name: Run Migrations
-        run: |
-          docker-compose run django-app python manage.py migrate
 
-      - name: Run Tests (Optional)
-        run: |
-          docker-compose run django-app python manage.py test
 
-      - name: Push Docker Image to Docker Hub
-        run: |
-          echo "${{ secrets.DOCKER_ACCESS_TOKEN }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
-          docker tag my-weather-app-base ${{ secrets.DOCKER_USERNAME }}/django-app:latest
-          docker push ${{ secrets.DOCKER_USERNAME }}/django-app:latest
 
-      - name: Deploy Application (Optional Step)
-        run: |
-          echo "Deployment steps go here. For example, SSH into the server and deploy the app."
+# name: CI/CD Pipeline for Dockerized Django App
+
+# on:
+#   push:
+#     branches:
+#       - main
+
+# jobs:
+#   build-and-deploy:
+#     name: Build and Deploy Dockerized Django App
+#     runs-on: ubuntu-latest
+
+#     services:
+#       db:
+#         image: mysql:8.0
+#         ports:
+#           - 3306:3306
+#         env:
+#           MYSQL_ROOT_PASSWORD: rootpassword
+#           MYSQL_DATABASE: weather_db_1
+#           MYSQL_USER: user
+#           MYSQL_PASSWORD: saifch
+#         options: >-
+#           --health-cmd="mysqladmin ping --silent"
+#           --health-interval=5s
+#           --health-timeout=10s
+#           --health-retries=20
+
+#     steps:
+#       - name: Checkout Code
+#         uses: actions/checkout@v2
+
+#       - name: Set Up Docker
+#         uses: docker/setup-qemu-action@v2
+
+#       - name: Set Up Docker Buildx
+#         uses: docker/setup-buildx-action@v2
+
+#       - name: Set Up Docker Compose
+#         uses: KengoTODA/actions-setup-docker-compose@v1.2.3
+
+#       - name: Start MySQL Container
+#         run: |
+#           docker-compose up -d db
+
+#       - name: Wait for MySQL to be Ready
+#         run: |
+#           echo "Waiting for MySQL to start..."
+#           timeout 120 bash -c 'while ! docker-compose exec db mysqladmin ping -u"user" -p"saifch" --silent; do
+#             sleep 5
+#           done'
+#           echo "MySQL is ready!"
+
+#       - name: Build Application Docker Image
+#         run: |
+#           docker-compose build django-app
+
+#       - name: Run Migrations
+#         run: |
+#           docker-compose run django-app python manage.py migrate
+
+#       - name: Run Tests (Optional)
+#         run: |
+#           docker-compose run django-app python manage.py test
+
+#       - name: Push Docker Image to Docker Hub
+#         run: |
+#           echo "${{ secrets.DOCKER_ACCESS_TOKEN }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+#           docker tag my-weather-app-base ${{ secrets.DOCKER_USERNAME }}/django-app:latest
+#           docker push ${{ secrets.DOCKER_USERNAME }}/django-app:latest
+
+#       - name: Deploy Application (Optional Step)
+#         run: |
+#           echo "Deployment steps go here. For example, SSH into the server and deploy the app."
