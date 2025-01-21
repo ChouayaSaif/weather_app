@@ -43,10 +43,14 @@ jobs:
       - name: Wait for MySQL to be Ready
         run: |
           echo "Waiting for MySQL to start..."
-          timeout 300 bash -c 'while ! mysqladmin ping -h"db" -u"user" -p"saifch" --silent; do
+          timeout 600 bash -c 'while ! mysqladmin ping -h"db" -u"user" -p"saifch" --silent; do
             sleep 5
           done'
           echo "MySQL is ready!"
+
+      - name: Check MySQL Logs
+        run: |
+          docker logs $(docker ps -q --filter "name=db")
 
       - name: Debug MySQL Connection
         run: |
