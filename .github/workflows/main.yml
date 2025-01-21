@@ -32,43 +32,31 @@ jobs:
         echo "DB_HOST=db" >> .env
         echo "DB_PORT=3306" >> .env
 
-    # Step 3: Cache Docker layers (optional)
-    - name: Cache Docker layers
-      uses: actions/cache@v3
-      with:
-        path: /tmp/.buildx-cache
-        key: docker-layers-${{ runner.os }}-${{ hashFiles('**/Dockerfile.base', '**/Dockerfile') }}
-        restore-keys: |
-          docker-layers-${{ runner.os }}-
+    # Step 3: Build the Docker image
+    - name: Build the Docker image
+      run: docker build -t my-weather-app .
 
-    # Step 4: Build the base Docker image
-    # - name: Build the base Docker image
-    #   run: docker build -t my-weather-app-base -f Dockerfile.base .
+    # Step 4: Run Docker Compose
+    - name: Run Docker Compose
+      run: docker-compose up -d
 
-    # Step 5: Set up Docker Compose
-    - name: Set up Docker Compose
-      run: docker-compose up --build -d
-
-    # Step 6: Wait for the database to be ready
+    # Step 5: Wait for the database to be ready
     - name: Wait for database
       run: |
         docker-compose exec db bash -c "while ! mysqladmin ping -h localhost -u user -psaifch --silent; do sleep 1; done"
 
-    # Step 7: Run migrations
+    # Step 6: Run migrations
     - name: Run migrations
       run: docker-compose exec django-app python manage.py migrate
 
-    # Step 8: Run tests
+    # Step 7: Run tests
     - name: Run tests
       run: docker-compose exec django-app python manage.py test
 
-    # Step 9: Tear down Docker Compose
+    # Step 8: Tear down Docker Compose
     - name: Tear down Docker Compose
       if: always()
       run: docker-compose down
-
-
-
 
 
 
