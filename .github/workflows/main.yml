@@ -51,5 +51,12 @@ jobs:
     needs: build-and-push
 
     steps:
+      # Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
       # Deploy the application using Docker Compose
-      - name: Deploy containers using Doc
+      - name: Deploy containers using Docker Compose
+        run: |
+          docker-compose down
+          docker-compose up -d
