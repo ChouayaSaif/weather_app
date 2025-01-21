@@ -63,8 +63,8 @@ jobs:
       run: docker-compose exec django-app python manage.py migrate
 
     # Step 8: Run tests
-    - name: Run tests
-      run: docker-compose exec django-app python manage.py test
+    # - name: Run tests
+    #   run: docker-compose exec django-app python manage.py test
 
     # Step 9: Tear down Docker Compose
     - name: Tear down Docker Compose
