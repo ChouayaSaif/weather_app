@@ -1,0 +1,17 @@
+.
+├── Dockerfile
+├── Dockerfile.base
+├── Makefile
+├── README.md
+├── data.sql
+├── db.sqlite3
+├── docker-compose.yml
+├── manage.py
+├── pip_cache
+├── project_structure.txt
+├── requirements.txt
+├── staticfiles
+├── weather
+└── weather_app
+
+5 directories, 10 files

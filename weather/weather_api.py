@@ -40,8 +40,7 @@ def get_weather_data(location):
 
             # Debugging
             print(f'all data: {weather_data}["weather"][0]')
-            print(f'condition: {weather_data['weather'][0]['description']}')
-
+        
             return {
                 'city': weather_data.get('name', 'Unknown'),
                 'temperature': weather_data['main']['temp'],

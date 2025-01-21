@@ -10,4 +10,3 @@ drf-yasg>=1.21.0
 cryptography
 djangorestframework
 django-prometheus
-#chatterbox-corpus

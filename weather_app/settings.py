@@ -88,25 +88,28 @@ WSGI_APPLICATION = 'weather_app.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        # 'ENGINE': 'django.db.backends.sqlite3',
-        # 'NAME': BASE_DIR / 'db.sqlite3',
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'weather_db_1',  # Name of your database
-        'USER': 'root',          # MySQL username
-        'PASSWORD': 'saifch',    # MySQL password
-        'HOST': '127.0.0.1',     # Use 'localhost' for local MySQL server
-        'PORT': '3309',          # Default MySQL port
-    }
     # 'default': {
+    #     # 'ENGINE': 'django.db.backends.sqlite3',
+    #     # 'NAME': BASE_DIR / 'db.sqlite3',
     #     'ENGINE': 'django.db.backends.mysql',
-    #     'NAME': 'weather_db_1',  # Database name
-    #     'USER': 'user',           # MySQL user
-    #     'PASSWORD': 'saifch',     # MySQL password
-    #     'HOST': 'db',             # MySQL service name defined in docker-compose.yml
-    #     'PORT': '3306',           # MySQL port inside the container
+    #     'NAME': 'weather_db_1',  # Name of your database
+    #     'USER': 'root',          # MySQL username
+    #     'PASSWORD': 'saifch',    # MySQL password
+    #     'HOST': '127.0.0.1',     # Use 'localhost' for local MySQL server
+    #     'PORT': '3309',          # Default MySQL port
     # }
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'weather_db_1', 
+        'USER': 'user',         
+        'PASSWORD': 'saifch',    
+        'HOST': 'db',             
+        'PORT': '3306',
+    }
 }
+
+
+
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URI = 'http://127.0.0.1:8000/accounts/google/login/callback/'
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '158935204339-uqug360hjf9b89h1t8qtcvmg2tj25k31.apps.googleusercontent.com'
