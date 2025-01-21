@@ -416,7 +416,6 @@ class DailyRecommendationsAPIView(ListAPIView):
         location_name = self.kwargs['location_name']
         links = generate_links(request, location_name=location_name)
         
-        # Include links in the response
         response.data["_links"] = links
         return response
 
