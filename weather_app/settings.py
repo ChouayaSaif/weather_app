@@ -88,6 +88,7 @@ WSGI_APPLICATION = 'weather_app.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
+    #"""""" Set up for connecting with desktop db service """""
     # 'default': {
     #     # 'ENGINE': 'django.db.backends.sqlite3',
     #     # 'NAME': BASE_DIR / 'db.sqlite3',
@@ -98,13 +99,34 @@ DATABASES = {
     #     'HOST': '127.0.0.1',     # Use 'localhost' for local MySQL server
     #     'PORT': '3309',          # Default MySQL port
     # }
+
+    #"""""" Set up for connecting with containerized db service """""
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.mysql',
+    #     'NAME': 'weather_db_1', 
+    #     'USER': 'user',         
+    #     'PASSWORD': 'saifch',    
+    #     'HOST': 'db',             
+    #     'PORT': '3306',
+    # }
+
+    #"""""" Set up for connecting with cloud db service """"""
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.mysql',
+    #     'NAME': 'sql12759022',  
+    #     'USER': 'sql12759022',         
+    #     'PASSWORD': 'XDFyPtjuM8',    
+    #     'HOST': 'sql12.freesqldatabase.com', 
+    #     'PORT': '3306',               
+    # }
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'weather_db_1', 
-        'USER': 'user',         
-        'PASSWORD': 'saifch',    
-        'HOST': 'db',             
-        'PORT': '3306',
+        'ENGINE': 'django_snowflake',
+        'NAME': 'WEATHER_DB',
+        'SCHEMA': 'PUBLIC',
+        'USER': 'SAIF',
+        'PASSWORD': 'Hayouta123456',
+        'ACCOUNT': 'RAHLBXI-TK36461',
+        'WAREHOUSE': 'COMPUTE_WH',
     }
 }
 

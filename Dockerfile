@@ -38,6 +38,9 @@ EXPOSE 8000
 # Set the command to run the application
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
 
+
+
+
 # Use the pre-built base image with dependencies already installed
 # FROM my-weather-app-base
 
