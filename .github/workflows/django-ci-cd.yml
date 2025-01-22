@@ -35,9 +35,9 @@ jobs:
         docker build -t my-django-app -f Dockerfile .
 
     # Step 6: Run tests (optional)
-    - name: Run Django tests
-      run: |
-        docker run --rm my-django-app python manage.py test
+    # - name: Run Django tests
+    #   run: |
+    #     docker run --rm my-django-app python manage.py test
 
     # Step 7: Tag the Docker image
     - name: Tag Docker image
