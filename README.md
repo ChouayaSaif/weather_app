@@ -8,20 +8,20 @@ This project can be deployed and used in two different ways, depending on your r
 
 ### Option 1: Cloud-Based Deployment with Render
 1. Pull the pre-built Docker image from DockerHub:
-   ```bash
+  ```bash
    docker pull saifchouaya/my-django-app:latest
-   ```
+  ```
 2. Install the required dependencies:
   ```bash
    pip install -r requirements.txt
-   ```
+  ```
 3. Run the Django development server:
   ```bash
    python manage.py runserver
-   ```
+  ```
 4. The service will rely on:
-  - A connection between the frontend and the cloud database hosted on Snowflake.
-  - Hosting on port 8000 using Render. You can access the service through the following link: https://my-django-app-1-6qn8.onrender.com/
+   - A connection between the frontend and the cloud database hosted on Snowflake.
+   - Hosting on port 8000 using Render. You can access the service through the following link: [https://my-django-app-1-6qn8.onrender.com/](https://my-django-app-1-6qn8.onrender.com/)
 
 
 ### Option 2: Local Deployment with Docker Compose
