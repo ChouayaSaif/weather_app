@@ -38,7 +38,7 @@ EXPOSE 8000
 # Set the command to run the application
 # CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
 # Note: The Django development server (runserver) is not suitable for production. Instead, use a production-ready server like gunicorn
-CMD ["gunicorn", "WeatherApplication.wsgi:application", "--bind", "0.0.0.0:8000"]
+CMD ["gunicorn", "weather_app.wsgi:application", "--bind", "0.0.0.0:8000"]
 
 
 
