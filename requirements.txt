@@ -10,4 +10,6 @@ drf-yasg>=1.21.0
 cryptography
 djangorestframework
 #django-prometheus
-django-snowflake
+django-snowflake==4.2.0
+gunicorn==21.2.0
+whitenoise==6.5.0
