@@ -114,16 +114,6 @@ DATABASES = {
     #     'HOST': 'db',             
     #     'PORT': '3306',
     # }
-
-    #"""""" Set up for connecting with cloud db service """"""
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.mysql',
-    #     'NAME': 'sql12759022',  
-    #     'USER': 'sql12759022',         
-    #     'PASSWORD': 'XDFyPtjuM8',    
-    #     'HOST': 'sql12.freesqldatabase.com', 
-    #     'PORT': '3306',               
-    # }
     'default': {
         'ENGINE': 'django_snowflake',
         'NAME': 'WEATHER_DB',
