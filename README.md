@@ -10,12 +10,15 @@ This project can be deployed and used in two different ways, depending on your r
 1. Pull the pre-built Docker image from DockerHub:
    ```bash
    docker pull saifchouaya/my-django-app:latest
+   ```
 2. Install the required dependencies:
   ```bash
    pip install -r requirements.txt
+   ```
 3. Run the Django development server:
   ```bash
    python manage.py runserver
+   ```
 4. The service will rely on:
   - A connection between the frontend and the cloud database hosted on Snowflake.
   - Hosting on port 8000 using Render. You can access the service through the following link: https://my-django-app-1-6qn8.onrender.com/
@@ -25,8 +28,11 @@ This project can be deployed and used in two different ways, depending on your r
 1. Pull the Docker image for local deployment:
   ```bash
    docker pull saifchouaya/my-weather-app:latest
+  ```
 2. Run Docker Compose to start the services:
-  docker compose up --build
+  ```bash
+    docker compose up --build
+  ```
 3. This setup will:
   - Trigger two services:
     - An application service (Django app).
@@ -35,6 +41,7 @@ This project can be deployed and used in two different ways, depending on your r
 4. Access your application locally at:
   ```bash
    http://localhost:8000
+  ```
    
 
 
