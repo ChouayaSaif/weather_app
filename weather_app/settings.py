@@ -94,16 +94,16 @@ WSGI_APPLICATION = 'weather_app.wsgi.application'
 
 DATABASES = {
     #"""""" Set up for connecting with desktop db service """""
-    # 'default': {
-    #     # 'ENGINE': 'django.db.backends.sqlite3',
-    #     # 'NAME': BASE_DIR / 'db.sqlite3',
-    #     'ENGINE': 'django.db.backends.mysql',
-    #     'NAME': 'weather_db_1',  # Name of your database
-    #     'USER': 'root',          # MySQL username
-    #     'PASSWORD': 'saifch',    # MySQL password
-    #     'HOST': '127.0.0.1',     # Use 'localhost' for local MySQL server
-    #     'PORT': '3309',          # Default MySQL port
-    # }
+    'default': {
+        # 'ENGINE': 'django.db.backends.sqlite3',
+        # 'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'weather_db_1',  # Name of your database
+        'USER': 'root',          # MySQL username
+        'PASSWORD': 'saifch',    # MySQL password
+        'HOST': '127.0.0.1',     # Use 'localhost' for local MySQL server
+        'PORT': '3309',          # Default MySQL port
+    }
 
     #"""""" Set up for connecting with containerized db service """""
     # 'default': {
@@ -114,15 +114,15 @@ DATABASES = {
     #     'HOST': 'db',             
     #     'PORT': '3306',
     # }
-    'default': {
-        'ENGINE': 'django_snowflake',
-        'NAME': 'WEATHER_DB',
-        'SCHEMA': 'PUBLIC',
-        'USER': 'SAIF',
-        'PASSWORD': 'Hayouta123456',
-        'ACCOUNT': 'RAHLBXI-TK36461',
-        'WAREHOUSE': 'COMPUTE_WH',
-    }
+    # 'default': {
+    #     'ENGINE': 'django_snowflake',
+    #     'NAME': 'WEATHER_DB',
+    #     'SCHEMA': 'PUBLIC',
+    #     'USER': 'SAIF',
+    #     'PASSWORD': 'Hayouta123456',
+    #     'ACCOUNT': 'RAHLBXI-TK36461',
+    #     'WAREHOUSE': 'COMPUTE_WH',
+    # }
 }
 
 

@@ -1,27 +1,35 @@
-# Makefile for Django application
-
+# Defines a set of commands (targets) that can be executed using the make command.
 # Variables
 VENV = venv
 PYTHON = $(VENV)/bin/python
 PIP = $(VENV)/bin/pip
 MANAGE = $(PYTHON) manage.py
 
-# Default target
+# Default target: The run target runs the Django development server using the command
+# Translates to venv/bin/python manage.py runserver
+# The development server starts, and you should see output in your terminal indicating that the server is running, typically on http://127.0.0.1:8000/.
+# Just run : "make" to trigger the server
 all: run
 
 # Create a virtual environment
+# Upgrade pip to latest version
+# installs the dependencies listed in requirements.txt
 venv:
 	python3 -m venv $(VENV)
 	$(PIP) install --upgrade pip
 	$(PIP) install -r requirements.txt
 
-# Run the development server
+# Run the django development server
 run:
 	$(MANAGE) runserver
 
 # Run tests
 test:
 	$(MANAGE) test
+
+# Run a single test by name
+test-single:
+	$(MANAGE) test -k $(test_method_name)
 
 # Run migrations
 migrate:
