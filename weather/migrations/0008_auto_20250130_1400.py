@@ -6,8 +6,8 @@ def add_default_places(apps, schema_editor):
     # Get the Place model dynamically using apps.get_model
     Place = apps.get_model('weather', 'Place')
     # Add default places
-    Place.objects.create(name="Carthage", location="Tunis", weather_type="Sunny, Overcast Clouds", description="An ancient city known for its historical ruins, including the famous Roman Baths, amphitheater, and ancient port.")
-    Place.objects.create(name="Dougga", location="Beja", weather_type="Sunny, Overcast Clouds", description=" is an ancient Roman archaeological site located in northern Tunisia, about 110 kilometers southwest of Tunis.")
+    Place.objects.create(name="Carthage", location="Tunis", weather_type="Sunny, overcast clouds", description="An ancient city known for its historical ruins, including the famous Roman Baths, amphitheater, and ancient port.")
+    Place.objects.create(name="Dougga", location="Beja", weather_type="Sunny, overcast clouds", description=" is an ancient Roman archaeological site located in northern Tunisia, about 110 kilometers southwest of Tunis.")
     Place.objects.create(name="El Djem", location="Mahdia", weather_type="Sunny, Clear Sky", description="A UNESCO World Heritage site known for its well-preserved Roman amphitheater, one of the largest in the world.")
     Place.objects.create(name="Sidi Bou Said", location="Tunis", weather_type="Sunny, Light Breeze", description="A charming seaside village known for its white and blue buildings, offering picturesque views of the Mediterranean Sea.")
     Place.objects.create(name="El Djem", location="Mahdia", weather_type="Sunny, Clear Sky", description="A UNESCO World Heritage site known for its well-preserved Roman amphitheater, one of the largest in the world.")
@@ -34,9 +34,9 @@ def add_default_places(apps, schema_editor):
     Place.objects.create(name="Douz", location="Kebili", weather_type="Hot, Clear Sky", description="Often referred to as the 'Gateway to the Sahara,' Douz is known for its desert landscapes, camel rides, and the famous Douz Festival.")
     Place.objects.create(name="Ghar El Melh", location="Bizerte", weather_type="Mild, Partly Cloudy", description="A quaint fishing village located near the northern tip of Tunisia, known for its scenic beauty, salt flats, and historical ruins.")
     Place.objects.create(name="Tunis Zoo", location="Tunis", weather_type="Mild, Partly Cloudy", description="A family-friendly destination featuring a variety of wildlife and beautiful landscapes, offering a great day out for nature lovers.")
-    Place.objects.create(name="Medenine", location="Medenine", weather_type="Hot, Clear Sky", description="Known for its traditional architecture and proximity to the desert, Medenine is a historic town that showcases the best of Tunisia’s southern culture.")
-    Place.objects.create(name="Kairouan Mosque", location="Kairouan", weather_type="Mild, Partly Cloudy", description="The Great Mosque of Kairouan is one of the holiest sites in Tunisia, with impressive architecture and a rich history dating back to the 7th century.")
-    Place.objects.create(name="Jebel Chambi", location="Kasserine", weather_type="Mild, Overcast", description="Tunisia's highest peak, Jebel Chambi offers stunning views of the surrounding mountains and a variety of hiking trails for nature enthusiasts.")
+    Place.objects.create(name="Medenine", location="Medenine", weather_type="Hot, overcast clouds", description="Known for its traditional architecture and proximity to the desert, Medenine is a historic town that showcases the best of Tunisia’s southern culture.")
+    Place.objects.create(name="Kairouan Mosque", location="Kairouan", weather_type="Mild, overcast clouds", description="The Great Mosque of Kairouan is one of the holiest sites in Tunisia, with impressive architecture and a rich history dating back to the 7th century.")
+    Place.objects.create(name="Jebel Chambi", location="Kasserine", weather_type="Mild, overcast clouds", description="Tunisia's highest peak, Jebel Chambi offers stunning views of the surrounding mountains and a variety of hiking trails for nature enthusiasts.")
 
 
 class Migration(migrations.Migration):
