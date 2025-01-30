@@ -31,7 +31,8 @@ ALLOWED_HOSTS = [
     '127.0.0.1',
     'django-app',
     'my-django-app-1-6qn8.onrender.com',
-    '51.20.9.32'
+    '51.20.9.32',
+    '51.20.9.32:8081',  # Add this line to ensure the IP with port is allowed
 ]
 
 
