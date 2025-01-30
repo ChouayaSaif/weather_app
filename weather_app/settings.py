@@ -26,16 +26,16 @@ SECRET_KEY = 'django-insecure-v-a_mnnf7)4e3fvstgy66)_^3#f7vqk-_d=p04443_uyvr-vf4
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-# ALLOWED_HOSTS = [
-#     'localhost',
-#     '127.0.0.1',
-#     'django-app',
-#     'my-django-app-1-6qn8.onrender.com',
-#     '51.20.9.32',  # Add this line for IP-based access
-#     '51.20.9.32:8081'
-# ]
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    'django-app',
+    'my-django-app-1-6qn8.onrender.com',
+    '51.20.9.32',  # Add this line for IP-based access
+    '51.20.9.32:8081'
+]
 
-ALLOWED_HOSTS = ['*']
+#ALLOWED_HOSTS = ['*']
 
 
 
@@ -100,14 +100,14 @@ WSGI_APPLICATION = 'weather_app.wsgi.application'
 DATABASES = {
     #"""""" Set up for connecting with desktop db service """""
     'default': {
-        # 'ENGINE': 'django.db.backends.sqlite3',
-        # 'NAME': BASE_DIR / 'db.sqlite3',
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'weather_db_1',  # Name of your database
-        'USER': 'root',          # MySQL username
-        'PASSWORD': 'saifch',    # MySQL password
-        'HOST': '127.0.0.1',     # Use 'localhost' for local MySQL server
-        'PORT': '3309',          # Default MySQL port
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    #     'ENGINE': 'django.db.backends.mysql',
+    #     'NAME': 'weather_db_1',  # Name of your database
+    #     'USER': 'root',          # MySQL username
+    #     'PASSWORD': 'saifch',    # MySQL password
+    #     'HOST': '127.0.0.1',     # Use 'localhost' for local MySQL server
+    #     'PORT': '3309',          # Default MySQL port
     }
 
     #"""""" Set up for connecting with containerized db service """""
