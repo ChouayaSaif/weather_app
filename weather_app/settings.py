@@ -31,6 +31,7 @@ ALLOWED_HOSTS = [
     '127.0.0.1',
     'django-app',
     'my-django-app-1-6qn8.onrender.com',
+    '51.20.9.32'
 ]
 
 
